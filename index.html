@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Frog Pepe | Anti-Rug Memecoin</title>
+    <style>
+        /* Reset CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Dynamiczne tło gradientowe */
+        body {
+            font-family: 'Courier New', monospace;
+            color: white;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #0a0a0a, #001100, #0a0a0a);
+            background-size: 400% 400%;
+            animation: gradientFlow 15s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Nawigacja */
+        nav {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            border-bottom: 2px solid #39FF14;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            color: #39FF14;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            text-shadow: 0 0 10px #39FF14;
+        }
+
+        /* Sekcja główna */
+        .hero {
+            text-align: center;
+            padding: 6rem 1rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            font-size: 1.5rem;
+        }
+
+        .cta-button {
+            background: #39FF14;
+            color: #000;
+            padding: 1rem 3rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #39FF14;
+        }
+
+        /* Sekcje */
+        .section {
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+        }
+
+        .tokenomics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .tokenomics-grid div {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid #39FF14;
+        }
+
+        /* Stopka */
+        footer {
+            text-align: center;
+            padding: 3rem 1rem;
+            border-top: 1px solid #333;
+        }
+
+        /* Responsywność */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .countdown {
+                font-size: 1.2rem;
+            }
+
+            .section h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#tokenomics">Tokenomics</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#whitepaper">Whitepaper</a></li>
+        </ul>
+    </nav>
+
+    <section id="home" class="hero">
+        <h1>🖤 DARK FROG PEPE</h1>
+        <p>The Anti-Rug Memecoin Revolution</p>
+        <div class="countdown">
+            <div id="days">00d</div>
+            <div id="hours">00h</div>
+            <div id="minutes">00m</div>
+            <div id="seconds">00s</div>
+        </div>
+        <button class="cta-button">Join Presale</button>
+    </section>
+
+    <section id="tokenomics" class="section">
+        <h2>🔐 Tokenomics</h2>
+        <div class="tokenomics-grid">
+            <div>
+                <h3>Total Supply: 1,000,000,000,000 DRKFP</h3>
+                <ul>
+                    <li>70% Presale (700B)</li>
+                    <li>20% Marketing (200B)</li>
+                    <li>10% Development (100B)</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="features" class="section">
+        <h2>⚡ Core Features</h2>
+        <div class="tokenomics-grid">
+            <div>
+                <h3>🔒 Locked Liquidity</h3>
+                <p>2-year liquidity lock via Unicrypt</p>
+            </div>
+            <div>
+                <h3>🎁 NFT Collection</h3>
+                <p>Exclusive Mystery Box NFTs</p>
+            </div>
+            <div>
+                <h3>🗳️ DAO Governance</h3>
+                <p>Community-controlled marketing</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="whitepaper" class="section">
+        <h2>📜 Whitepaper</h2>
+        <a href="/whitepaper.pdf" class="cta-button" download>Download PDF</a>
+    </section>
+
+    <footer>
+        <p>☠️ Dark Frog Army - Join the Revolution</p>
+        <div style="margin-top: 1rem;">
+            <a href="#" style="color: #39FF14; margin: 0 1rem;">Twitter</a>
+            <a href="#" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
+            <a href="#" style="color: #39FF14; margin: 0 1rem;">GitBook</a>
+        </div>
+    </footer>
+
+    <script>
+        // Licznik czasu
+        const presaleEnd = new Date('2024-10-01T00:00:00').getTime();
+        
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = presaleEnd - now;
+
+            document.getElementById('days').innerHTML = Math.floor(distance / (86400000)) + "d";
+            document.getElementById('hours').innerHTML = Math.floor((distance % 86400000) / 3600000) + "h";
+            document.getElementById('minutes').innerHTML = Math.floor((distance % 3600000) / 60000) + "m";
+            document.getElementById('seconds').innerHTML = Math.floor((distance % 60000) / 1000) + "s";
+        }
+
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
