@@ -10,7 +10,34 @@
             --dark-bg: #000;
             --cyber-purple: #a020f0;
         }
+ nav {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            border-bottom: 2px solid #39FF14;
+            z-index: 100;
+        }
 
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            color: #39FF14;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            text-shadow: 0 0 10px #39FF14;
+        }
         body {
             background: var(--dark-bg);
             color: var(--neon-green);
