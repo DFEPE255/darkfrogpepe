@@ -122,6 +122,7 @@
         .wallet-section, .buy-section, .staking-section, .sale-info {
             text-align: center;
             margin: 2rem 0;
+            display: none; /* Domyślnie ukryte */
         }
 
         .input-field {
@@ -169,6 +170,26 @@
         .sale-info p {
             font-size: 1.1rem;
             margin: 0.5rem 0;
+        }
+
+        /* Sekcja Opisu Tokenu */
+        .token-description {
+            padding: 4rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .token-description h2 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+        }
+
+        .token-description p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
 
         /* Sekcje */
@@ -241,6 +262,7 @@
     <nav>
         <ul>
             <li><a href="#home">Home</a></li>
+            <li><a href="#token-description">Token Description</a></li> <!-- Dodana sekcja opisu tokena -->
             <li><a href="#tokenomics">Tokenomics</a></li>
             <li><a href="#features">Features</a></li>
             <li><a href="#whitepaper">Whitepaper</a></li>
@@ -262,8 +284,8 @@
             </div>
         </div>
 
-        <!-- Sekcja Informacji o Sprzedaży -->
-        <div class="sale-info">
+        <!-- Sekcja Informacji o Sprzedaży (domyślnie ukryta) -->
+        <div class="sale-info" id="saleInfoSection">
             <h2>Presale Progress</h2>
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
@@ -273,15 +295,15 @@
             <p>Price Increase In: <span id="priceIncreaseTimer">00h 00m 00s</span></p>
         </div>
 
-        <!-- Sekcja Integracji Portfela -->
-        <div class="wallet-section">
+        <!-- Sekcja Integracji Portfela (domyślnie ukryta) -->
+        <div class="wallet-section" id="walletSection">
             <h2>Connect Wallet</h2>
             <button class="cta-button" onclick="connectWallet()">Connect Wallet</button>
             <div id="walletStatus" class="wallet-status"></div>
         </div>
 
-        <!-- Sekcja Zakupu Tokenów -->
-        <div class="buy-section">
+        <!-- Sekcja Zakupu Tokenów (domyślnie ukryta) -->
+        <div class="buy-section" id="buySection">
             <h2>Buy DFEPE Tokens</h2>
             <input type="number" id="buyAmount" placeholder="ETH amount" class="input-field">
             <input type="text" id="referrer" placeholder="Referrer address (optional)" class="input-field">
@@ -289,14 +311,34 @@
             <div id="buyStatus" class="status-message"></div>
         </div>
 
-        <!-- Sekcja Stakingu -->
-        <div class="staking-section">
+        <!-- Sekcja Stakingu (domyślnie ukryta) -->
+        <div class="staking-section" id="stakingSection">
             <h2>Stake DFEPE Tokens</h2>
             <input type="number" id="stakeAmount" placeholder="DFEPE amount" class="input-field">
             <button class="cta-button" onclick="stake()">Stake</button>
             <button class="cta-button" onclick="unstake()">Unstake</button>
             <div id="stakeStatus" class="status-message"></div>
         </div>
+    </section>
+
+    <!-- Sekcja Opisu Tokenu -->
+    <section id="token-description" class="token-description">
+        <h2>🐸 Dark Frog Pepe Token</h2>
+        <p>
+            Where the memetic revolution meets the cybernetic abyss.
+        </p>
+        <p>
+            In the dark corners of the decentralized metaverse, among whispering algorithms and pulsating neon lights, a new cult is born. DFEPE -- a token mutated in the depths of the crypto-universe to become a symbol of rebellion against rigid systems. Its frog eyes glow in the dark, tracking your every move on the rusted chains of blocks.
+        </p>
+        <p>
+            Join the cyber-anarchists who stake, trade, and burn insubordination in the furnace of decentralized power. Here, there is no mercy for weak wallets -- only the dark dance of cryptographic codes and NFTs that breathe the life of their owners.
+        </p>
+        <p>
+            Warning: In this swamp, profits evaporate faster than cybernetic LSD, and every click could be your last transaction. 🐸🔮
+        </p>
+        <p>
+            Dive into the darkness or let the darkness dive into you.
+        </p>
     </section>
 
     <section id="tokenomics" class="section">
@@ -358,6 +400,25 @@
         // Inicjalizacja kontraktu
         const contract = new web3.eth.Contract(abi, contractAddress);
 
+        // Funkcja do sprawdzenia, czy pre-sale się rozpoczął
+        async function checkPresaleStatus() {
+            try {
+                const presaleStartTime = await contract.methods.getPresaleStartTime().call(); // Zakładamy, że kontrakt ma taką metodę
+                const now = Math.floor(Date.now() / 1000); // Czas w sekundach
+
+                if (now >= presaleStartTime) {
+                    // Jeśli pre-sale się rozpoczął, pokaż sekcje
+                    document.getElementById('saleInfoSection').style.display = 'block';
+                    document.getElementById('walletSection').style.display = 'block';
+                    document.getElementById('buySection').style.display = 'block';
+                    document.getElementById('stakingSection').style.display = 'block';
+                    updateSaleInfo(); // Rozpocznij aktualizację informacji
+                }
+            } catch (error) {
+                console.error("Error checking presale status:", error);
+            }
+        }
+
         // Funkcja do aktualizacji informacji o sprzedaży
         async function updateSaleInfo() {
             try {
@@ -394,11 +455,15 @@
             }
         }
 
-        // Aktualizuj informacje co 5 sekund
-        setInterval(updateSaleInfo, 5000);
+        // Sprawdź status pre-sale po załadowaniu strony
+        window.addEventListener('load', checkPresaleStatus);
 
-        // Pierwsza aktualizacja po załadowaniu strony
-        window.addEventListener('load', updateSaleInfo);
+        // Aktualizuj informacje co 5 sekund (jeśli pre-sale się rozpoczął)
+        setInterval(() => {
+            if (document.getElementById('saleInfoSection').style.display === 'block') {
+                updateSaleInfo();
+            }
+        }, 5000);
     </script>
 </body>
 </html>
