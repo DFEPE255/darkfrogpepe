@@ -76,11 +76,30 @@
         }
 
         .countdown {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .countdown h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
+        }
+
+        .countdown-timer {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
+            gap: 1.5rem;
             font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .countdown-timer div {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid #39FF14;
+            min-width: 80px;
         }
 
         .cta-button {
@@ -98,6 +117,29 @@
         .cta-button:hover {
             transform: scale(1.05);
             box-shadow: 0 0 20px #39FF14;
+        }
+
+        .wallet-section, .buy-section, .staking-section {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .input-field {
+            width: 80%;
+            max-width: 300px;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 1px solid #39FF14;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            font-family: 'Courier New', monospace;
+        }
+
+        .status-message, .wallet-status {
+            margin-top: 1rem;
+            font-size: 1rem;
+            color: #39FF14;
         }
 
         /* Sekcje */
@@ -150,8 +192,14 @@
                 font-size: 1rem;
             }
 
-            .countdown {
+            .countdown-timer {
                 font-size: 1.2rem;
+                gap: 1rem;
+            }
+
+            .countdown-timer div {
+                min-width: 60px;
+                padding: 0.8rem;
             }
 
             .section h2 {
@@ -173,126 +221,42 @@
     <section id="home" class="hero">
         <h1>DARK FROG PEPE</h1>
         <p>The Anti-Rug Memecoin Revolution</p>
+
+        <!-- Sekcja Countdown -->
         <div class="countdown">
-            <div id="days">00d</div>
-            <div id="hours">00h</div>
-            <div id="minutes">00m</div>
-            <div id="seconds">00s</div>
+            <h2>Presale Starts In:</h2>
+            <div class="countdown-timer">
+                <div id="days">00d</div>
+                <div id="hours">00h</div>
+                <div id="minutes">00m</div>
+                <div id="seconds">00s</div>
+            </div>
         </div>
-        
+
         <!-- Sekcja Integracji Portfela -->
-<div class="cyber-frame">
-    <h2>Connect Wallet</h2>
-    <button onclick="connectWallet()">Connect Wallet</button>
-    <div id="walletStatus"></div>
-</div>
+        <div class="wallet-section">
+            <h2>Connect Wallet</h2>
+            <button class="cta-button" onclick="connectWallet()">Connect Wallet</button>
+            <div id="walletStatus" class="wallet-status"></div>
+        </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-<script>
-    let provider;
-    let account;
-
-    async function connectWallet() {
-        if (window.ethereum) {
-            provider = new Web3(window.ethereum);
-            await window.ethereum.enable();
-            account = (await provider.eth.getAccounts())[0];
-            document.getElementById('walletStatus').innerText = `Connected: ${account.substring(0, 6)}...${account.substring(38)}`;
-        } else {
-            alert("Please install MetaMask!");
-        }
-    }
-</script>
-        
         <!-- Sekcja Zakupu Tokenów -->
-<div class="cyber-frame">
-    <h2>Buy DFEPE Tokens</h2>
-    <input type="number" id="buyAmount" placeholder="ETH amount">
-    <input type="text" id="referrer" placeholder="Referrer address (optional)">
-    <button onclick="buyTokens()">Buy DFEPE</button>
-    <div id="buyStatus"></div>
-</div>
-
-<script>
-    const contractAddress = "0xYourContractAddress"; // Zastąp prawdziwym adresem kontraktu
-    const abi = [ /* Wklej ABI kontraktu tutaj */ ];
-
-    async function buyTokens() {
-        if (!provider || !account) {
-            alert("Please connect your wallet first!");
-            return;
-        }
-
-        const amount = document.getElementById('buyAmount').value;
-        const referrer = document.getElementById('referrer').value || "0x0000000000000000000000000000000000000000";
-
-        if (!amount || amount <= 0) {
-            alert("Please enter a valid ETH amount.");
-            return;
-        }
-
-        const contract = new provider.eth.Contract(abi, contractAddress);
-        try {
-            document.getElementById('buyStatus').innerText = "Processing transaction...";
-            await contract.methods.buyTokens(referrer)
-                .send({ from: account, value: provider.utils.toWei(amount, 'ether') });
-            document.getElementById('buyStatus').innerText = "Tokens purchased successfully!";
-        } catch (error) {
-            document.getElementById('buyStatus').innerText = "Transaction failed: " + error.message;
-        }
-    }
-</script>
+        <div class="buy-section">
+            <h2>Buy DFEPE Tokens</h2>
+            <input type="number" id="buyAmount" placeholder="ETH amount" class="input-field">
+            <input type="text" id="referrer" placeholder="Referrer address (optional)" class="input-field">
+            <button class="cta-button" onclick="buyTokens()">Buy DFEPE</button>
+            <div id="buyStatus" class="status-message"></div>
+        </div>
 
         <!-- Sekcja Stakingu -->
-<div class="cyber-frame">
-    <h2>Stake DFEPE Tokens</h2>
-    <input type="number" id="stakeAmount" placeholder="DFEPE amount">
-    <button onclick="stake()">Stake</button>
-    <button onclick="unstake()">Unstake</button>
-    <div id="stakeStatus"></div>
-</div>
-
-<script>
-    async function stake() {
-        if (!provider || !account) {
-            alert("Please connect your wallet first!");
-            return;
-        }
-
-        const amount = document.getElementById('stakeAmount').value;
-        if (!amount || amount <= 0) {
-            alert("Please enter a valid DFEPE amount.");
-            return;
-        }
-
-        const contract = new provider.eth.Contract(abi, contractAddress);
-        try {
-            document.getElementById('stakeStatus').innerText = "Processing staking...";
-            await contract.methods.stake(provider.utils.toWei(amount, 'ether'))
-                .send({ from: account });
-            document.getElementById('stakeStatus').innerText = "Tokens staked successfully!";
-        } catch (error) {
-            document.getElementById('stakeStatus').innerText = "Staking failed: " + error.message;
-        }
-    }
-
-    async function unstake() {
-        if (!provider || !account) {
-            alert("Please connect your wallet first!");
-            return;
-        }
-
-        const contract = new provider.eth.Contract(abi, contractAddress);
-        try {
-            document.getElementById('stakeStatus').innerText = "Processing unstaking...";
-            await contract.methods.unstake().send({ from: account });
-            document.getElementById('stakeStatus').innerText = "Tokens unstaked successfully!";
-        } catch (error) {
-            document.getElementById('stakeStatus').innerText = "Unstaking failed: " + error.message;
-        }
-    }
-</script>
-        
+        <div class="staking-section">
+            <h2>Stake DFEPE Tokens</h2>
+            <input type="number" id="stakeAmount" placeholder="DFEPE amount" class="input-field">
+            <button class="cta-button" onclick="stake()">Stake</button>
+            <button class="cta-button" onclick="unstake()">Unstake</button>
+            <div id="stakeStatus" class="status-message"></div>
+        </div>
     </section>
 
     <section id="tokenomics" class="section">
@@ -341,10 +305,11 @@
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
         // Licznik czasu
-        const presaleEnd = new Date('2024-10-01T00:00:00').getTime();
-        
+        const presaleEnd = new Date('2025-04-01T00:00:00').getTime();
+
         function updateTimer() {
             const now = new Date().getTime();
             const distance = presaleEnd - now;
@@ -356,6 +321,90 @@
         }
 
         setInterval(updateTimer, 1000);
+
+        // Integracja Portfela
+        let provider;
+        let account;
+
+        async function connectWallet() {
+            if (window.ethereum) {
+                provider = new Web3(window.ethereum);
+                await window.ethereum.enable();
+                account = (await provider.eth.getAccounts())[0];
+                document.getElementById('walletStatus').innerText = `Connected: ${account.substring(0, 6)}...${account.substring(38)}`;
+            } else {
+                alert("Please install MetaMask!");
+            }
+        }
+
+        // Zakup Tokenów
+        const contractAddress = "0xYourContractAddress"; // Zastąp prawdziwym adresem kontraktu
+        const abi = [ /* Wklej ABI kontraktu tutaj */ ];
+
+        async function buyTokens() {
+            if (!provider || !account) {
+                alert("Please connect your wallet first!");
+                return;
+            }
+
+            const amount = document.getElementById('buyAmount').value;
+            const referrer = document.getElementById('referrer').value || "0x0000000000000000000000000000000000000000";
+
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid ETH amount.");
+                return;
+            }
+
+            const contract = new provider.eth.Contract(abi, contractAddress);
+            try {
+                document.getElementById('buyStatus').innerText = "Processing transaction...";
+                await contract.methods.buyTokens(referrer)
+                    .send({ from: account, value: provider.utils.toWei(amount, 'ether') });
+                document.getElementById('buyStatus').innerText = "Tokens purchased successfully!";
+            } catch (error) {
+                document.getElementById('buyStatus').innerText = "Transaction failed: " + error.message;
+            }
+        }
+
+        // Staking
+        async function stake() {
+            if (!provider || !account) {
+                alert("Please connect your wallet first!");
+                return;
+            }
+
+            const amount = document.getElementById('stakeAmount').value;
+            if (!amount || amount <= 0) {
+                alert("Please enter a valid DFEPE amount.");
+                return;
+            }
+
+            const contract = new provider.eth.Contract(abi, contractAddress);
+            try {
+                document.getElementById('stakeStatus').innerText = "Processing staking...";
+                await contract.methods.stake(provider.utils.toWei(amount, 'ether'))
+                    .send({ from: account });
+                document.getElementById('stakeStatus').innerText = "Tokens staked successfully!";
+            } catch (error) {
+                document.getElementById('stakeStatus').innerText = "Staking failed: " + error.message;
+            }
+        }
+
+        async function unstake() {
+            if (!provider || !account) {
+                alert("Please connect your wallet first!");
+                return;
+            }
+
+            const contract = new provider.eth.Contract(abi, contractAddress);
+            try {
+                document.getElementById('stakeStatus').innerText = "Processing unstaking...";
+                await contract.methods.unstake().send({ from: account });
+                document.getElementById('stakeStatus').innerText = "Tokens unstaked successfully!";
+            } catch (error) {
+                document.getElementById('stakeStatus').innerText = "Unstaking failed: " + error.message;
+            }
+        }
     </script>
 </body>
 </html>
