@@ -119,7 +119,7 @@
             box-shadow: 0 0 20px #39FF14;
         }
 
-        .wallet-section, .buy-section, .staking-section {
+        .wallet-section, .buy-section, .staking-section, .sale-info {
             text-align: center;
             margin: 2rem 0;
         }
@@ -140,6 +140,35 @@
             margin-top: 1rem;
             font-size: 1rem;
             color: #39FF14;
+        }
+
+        /* Sekcja Informacji o Sprzedaży */
+        .sale-info {
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .progress-bar {
+            width: 80%;
+            max-width: 500px;
+            height: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            border: 1px solid #39FF14;
+            margin: 1rem auto;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: #39FF14;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .sale-info p {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
         }
 
         /* Sekcje */
@@ -233,6 +262,17 @@
             </div>
         </div>
 
+        <!-- Sekcja Informacji o Sprzedaży -->
+        <div class="sale-info">
+            <h2>Presale Progress</h2>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p>Tokens Sold: <span id="tokensSold">0%</span></p>
+            <p>Current Price: <span id="currentPrice">0.0001 ETH</span></p>
+            <p>Price Increase In: <span id="priceIncreaseTimer">00h 00m 00s</span></p>
+        </div>
+
         <!-- Sekcja Integracji Portfela -->
         <div class="wallet-section">
             <h2>Connect Wallet</h2>
@@ -308,125 +348,57 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
     <script>
-        // Licznik czasu
-        const presaleEnd = new Date('2025-04-01T00:00:00Z').getTime();
+        // Inicjalizacja Web3 (bez konieczności logowania)
+        const web3 = new Web3("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID"); // Użyj Infura lub innego dostawcy node'ów
 
-        function updateTimer() {
-            const now = new Date().getTime();
-            const distance = presaleEnd - now;
-
-            if (distance < 0) {
-                document.getElementById('countdown').innerHTML = "Presale has started!";
-                return;
-            }
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerHTML = days + "d";
-            document.getElementById('hours').innerHTML = hours + "h";
-            document.getElementById('minutes').innerHTML = minutes + "m";
-            document.getElementById('seconds').innerHTML = seconds + "s";
-        }
-
-        setInterval(updateTimer, 1000);
-        updateTimer();
-
-        // Integracja Portfela
-        let provider;
-        let account;
-
-        async function connectWallet() {
-            try {
-                if (!window.ethereum) {
-                    alert("Please install MetaMask or another Web3 wallet!");
-                    return;
-                }
-
-                provider = new Web3(window.ethereum);
-                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                account = accounts[0];
-                document.getElementById('walletStatus').innerText = `Connected: ${account.substring(0, 6)}...${account.substring(38)}`;
-            } catch (error) {
-                console.error("Wallet connection error:", error);
-                alert("Connection error: " + error.message);
-            }
-        }
-
-        // Zakup Tokenów
+        // Adres i ABI kontraktu
         const contractAddress = "0xYourContractAddress"; // Zastąp prawdziwym adresem kontraktu
         const abi = [ /* Wklej ABI kontraktu tutaj */ ];
 
-        async function buyTokens() {
+        // Inicjalizacja kontraktu
+        const contract = new web3.eth.Contract(abi, contractAddress);
+
+        // Funkcja do aktualizacji informacji o sprzedaży
+        async function updateSaleInfo() {
             try {
-                if (!provider || !account) {
-                    alert("Please connect your wallet first!");
-                    return;
+                // Pobierz dane z kontraktu
+                const totalTokens = await contract.methods.totalSupply().call();
+                const soldTokens = await contract.methods.tokensSold().call();
+                const currentPrice = await contract.methods.getCurrentPrice().call(); // Zakładamy, że kontrakt ma taką metodę
+                const priceIncreaseTime = await contract.methods.getPriceIncreaseTime().call(); // Zakładamy, że kontrakt ma taką metodę
+
+                // Oblicz procent sprzedanych tokenów
+                const tokensSoldPercent = (soldTokens / totalTokens) * 100;
+
+                // Aktualizuj pasek postępu
+                document.getElementById('progress').style.width = tokensSoldPercent + '%';
+                document.getElementById('tokensSold').innerText = tokensSoldPercent.toFixed(2) + '%';
+
+                // Aktualizuj cenę tokena (konwersja z wei na ETH)
+                document.getElementById('currentPrice').innerText = web3.utils.fromWei(currentPrice, 'ether') + ' ETH';
+
+                // Aktualizuj czas do zmiany ceny
+                const now = Math.floor(Date.now() / 1000); // Czas w sekundach
+                const timeLeft = priceIncreaseTime - now;
+
+                if (timeLeft < 0) {
+                    document.getElementById('priceIncreaseTimer').innerText = "Price increased!";
+                } else {
+                    const hours = Math.floor(timeLeft / 3600);
+                    const minutes = Math.floor((timeLeft % 3600) / 60);
+                    const seconds = timeLeft % 60;
+                    document.getElementById('priceIncreaseTimer').innerText = `${hours}h ${minutes}m ${seconds}s`;
                 }
-
-                const amount = document.getElementById('buyAmount').value;
-                const referrer = document.getElementById('referrer').value || "0x0000000000000000000000000000000000000000";
-
-                if (!amount || amount <= 0) {
-                    alert("Please enter a valid ETH amount.");
-                    return;
-                }
-
-                const contract = new provider.eth.Contract(abi, contractAddress);
-                document.getElementById('buyStatus').innerText = "Processing transaction...";
-                await contract.methods.buyTokens(referrer)
-                    .send({ from: account, value: provider.utils.toWei(amount, 'ether') });
-                document.getElementById('buyStatus').innerText = "Tokens purchased successfully!";
             } catch (error) {
-                console.error("Transaction error:", error);
-                document.getElementById('buyStatus').innerText = "Transaction failed: " + error.message;
+                console.error("Error fetching data from contract:", error);
             }
         }
 
-        // Staking
-        async function stake() {
-            try {
-                if (!provider || !account) {
-                    alert("Please connect your wallet first!");
-                    return;
-                }
+        // Aktualizuj informacje co 5 sekund
+        setInterval(updateSaleInfo, 5000);
 
-                const amount = document.getElementById('stakeAmount').value;
-                if (!amount || amount <= 0) {
-                    alert("Please enter a valid DFEPE amount.");
-                    return;
-                }
-
-                const contract = new provider.eth.Contract(abi, contractAddress);
-                document.getElementById('stakeStatus').innerText = "Processing staking...";
-                await contract.methods.stake(provider.utils.toWei(amount, 'ether'))
-                    .send({ from: account });
-                document.getElementById('stakeStatus').innerText = "Tokens staked successfully!";
-            } catch (error) {
-                console.error("Staking error:", error);
-                document.getElementById('stakeStatus').innerText = "Staking failed: " + error.message;
-            }
-        }
-
-        // Unstaking
-        async function unstake() {
-            try {
-                if (!provider || !account) {
-                    alert("Please connect your wallet first!");
-                    return;
-                }
-
-                const contract = new provider.eth.Contract(abi, contractAddress);
-                document.getElementById('stakeStatus').innerText = "Processing unstaking...";
-                await contract.methods.unstake().send({ from: account });
-                document.getElementById('stakeStatus').innerText = "Tokens unstaked successfully!";
-            } catch (error) {
-                console.error("Unstaking error:", error);
-                document.getElementById('stakeStatus').innerText = "Unstaking failed: " + error.message;
-            }
-        }
+        // Pierwsza aktualizacja po załadowaniu strony
+        window.addEventListener('load', updateSaleInfo);
     </script>
 </body>
 </html>
