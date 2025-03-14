@@ -186,7 +186,7 @@
     <div id="walletStatus"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
 <script>
     let provider;
     let account;
@@ -199,6 +199,44 @@
             document.getElementById('walletStatus').innerText = `Connected: ${account.substring(0, 6)}...${account.substring(38)}`;
         } else {
             alert("Please install MetaMask!");
+        }
+    }
+</script>
+        <!-- Sekcja Zakupu Tokenów -->
+<div class="cyber-frame">
+    <h2>Buy DFEPE Tokens</h2>
+    <input type="number" id="buyAmount" placeholder="ETH amount">
+    <input type="text" id="referrer" placeholder="Referrer address (optional)">
+    <button onclick="buyTokens()">Buy DFEPE</button>
+    <div id="buyStatus"></div>
+</div>
+
+<script>
+    const contractAddress = "0xYourContractAddress"; // Zastąp prawdziwym adresem kontraktu
+    const abi = [ /* Wklej ABI kontraktu tutaj */ ];
+
+    async function buyTokens() {
+        if (!provider || !account) {
+            alert("Please connect your wallet first!");
+            return;
+        }
+
+        const amount = document.getElementById('buyAmount').value;
+        const referrer = document.getElementById('referrer').value || "0x0000000000000000000000000000000000000000";
+
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid ETH amount.");
+            return;
+        }
+
+        const contract = new provider.eth.Contract(abi, contractAddress);
+        try {
+            document.getElementById('buyStatus').innerText = "Processing transaction...";
+            await contract.methods.buyTokens(referrer)
+                .send({ from: account, value: provider.utils.toWei(amount, 'ether') });
+            document.getElementById('buyStatus').innerText = "Tokens purchased successfully!";
+        } catch (error) {
+            document.getElementById('buyStatus').innerText = "Transaction failed: " + error.message;
         }
     }
 </script>
