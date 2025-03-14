@@ -305,7 +305,64 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
+<script>
+    let provider;
+    let account;
+
+    async function connectWallet() {
+        try {
+            // Sprawdź czy MetaMask lub inny portfel jest dostępny
+            if (!window.ethereum) {
+                alert("Please install MetaMask or another Web3 wallet!");
+                return;
+            }
+
+            // Inicjalizuj Web3 z nowoczesnym EIP-1193 providerem
+            provider = new Web3(window.ethereum);
+            
+            // Sprawdź czy użytkownik już autoryzował połączenie
+            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            
+            if (accounts.length > 0) {
+                // Portfel już połączony
+                account = accounts[0];
+                updateWalletStatus();
+                return;
+            }
+
+            // Żądaj autoryzacji
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            account = (await provider.eth.getAccounts())[0];
+            
+            updateWalletStatus();
+            console.log("Connected account:", account);
+
+        } catch (error) {
+            // Rozszerzona obsługa błędów
+            console.error("Wallet connection error:", error);
+            
+            if (error.code === 4001) {
+                alert("Connection rejected by user!");
+            } else if (error.code === -32002) {
+                alert("Already processing request. Check your wallet!");
+            } else {
+                alert("Connection error: " + error.message);
+            }
+        }
+    }
+
+    function updateWalletStatus() {
+        const statusElement = document.getElementById('walletStatus');
+        if (account) {
+            statusElement.innerHTML = `Connected: ${account.substring(0, 6)}...${account.substring(38)}`;
+            statusElement.style.color = "#39FF14";
+        } else {
+            statusElement.innerHTML = "Not connected";
+            statusElement.style.color = "red";
+        }
+    }
+</script>
     <script>
         // Ustaw datę startu presale (np. 15 grudnia 2024 roku o 18:00 UTC)
     const presaleEnd = new Date('2025-04-01T00:00:00Z').getTime();
