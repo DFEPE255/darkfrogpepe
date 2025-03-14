@@ -173,30 +173,42 @@
     <section id="home" class="hero">
         <h1>DARK FROG PEPE</h1>
         <p>The Anti-Rug Memecoin Revolution</p>
-        <div id="countdown"></div>
-        <button onclick="connectWallet()">Connect Wallet</button>
-        <div id="walletStatus"></div>
-        
-        <div class="cyber-frame">
-            <h2>Presale</h2>
-            <input type="number" id="buyAmount" placeholder="ETH amount">
-            <input type="text" id="referrer" placeholder="Referrer address (optional)">
-            <button onclick="buyTokens()">Buy DFEPE</button>
+        <div class="countdown">
+            <div id="days">00d</div>
+            <div id="hours">00h</div>
+            <div id="minutes">00m</div>
+            <div id="seconds">00s</div>
         </div>
+        <!-- Sekcja Integracji Portfela -->
+<div class="cyber-frame">
+    <h2>Connect Wallet</h2>
+    <button onclick="connectWallet()">Connect Wallet</button>
+    <div id="walletStatus"></div>
+</div>
 
-        <div class="cyber-frame">
-            <h2>Staking</h2>
-            <input type="number" id="stakeAmount" placeholder="DFEPE amount">
-            <button onclick="stake()">Stake</button>
-            <button onclick="unstake()">Unstake</button>
-        </div>
+<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+<script>
+    let provider;
+    let account;
 
+    async function connectWallet() {
+        if (window.ethereum) {
+            provider = new Web3(window.ethereum);
+            await window.ethereum.enable();
+            account = (await provider.eth.getAccounts())[0];
+            document.getElementById('walletStatus').innerText = `Connected: ${account.substring(0, 6)}...${account.substring(38)}`;
+        } else {
+            alert("Please install MetaMask!");
+        }
+    }
+</script>
+    </section>
 
     <section id="tokenomics" class="section">
         <h2>🔐 Tokenomics</h2>
         <div class="tokenomics-grid">
             <div>
-                <h3>Total Supply: 1,000,000,000,000 DFEPE</h3>
+                <h3>Total Supply: 1,000,000,000,000 DRKFP</h3>
                 <ul>
                     <li>70% Presale (700B)</li>
                     <li>20% Marketing (200B)</li>
@@ -234,13 +246,13 @@
         <div style="margin-top: 1rem;">
             <a href="#" style="color: #39FF14; margin: 0 1rem;">Twitter</a>
             <a href="#" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
-            <a href="#" style="color: #39FF14; margin: 0 1rem;">Facebook</a>
+            <a href="#" style="color: #39FF14; margin: 0 1rem;">GitBook</a>
         </div>
     </footer>
 
     <script>
         // Licznik czasu
-        const presaleEnd = new Date('2024-07-01T00:00:00').getTime();
+        const presaleEnd = new Date('2024-10-01T00:00:00').getTime();
         
         function updateTimer() {
             const now = new Date().getTime();
