@@ -263,7 +263,7 @@
         <h2>🔐 Tokenomics</h2>
         <div class="tokenomics-grid">
             <div>
-                <h3>Total Supply: 1,000,000,000,000 DRKFP</h3>
+                <h3>Total Supply: 1,000,000,000,000 DFEPE</h3>
                 <ul>
                     <li>70% Presale (700B)</li>
                     <li>20% Marketing (200B)</li>
@@ -299,28 +299,46 @@
     <footer>
         <p>☠️ Dark Frog Army - Join the Revolution</p>
         <div style="margin-top: 1rem;">
-            <a href="#" style="color: #39FF14; margin: 0 1rem;">Twitter</a>
+            <a href="#" style="color: #39FF14; margin: 0 1rem;">X</a>
             <a href="#" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
-            <a href="#" style="color: #39FF14; margin: 0 1rem;">GitBook</a>
+            <a href="#" style="color: #39FF14; margin: 0 1rem;">Facebook</a>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
     <script>
-        // Licznik czasu
-        const presaleEnd = new Date('2025-04-01T00:00:00').getTime();
+        // Ustaw datę startu presale (np. 15 grudnia 2024 roku o 18:00 UTC)
+    const presaleEnd = new Date('2024-12-15T18:00:00Z').getTime();
 
-        function updateTimer() {
-            const now = new Date().getTime();
-            const distance = presaleEnd - now;
+    function updateTimer() {
+        const now = new Date().getTime();
+        const distance = presaleEnd - now;
 
-            document.getElementById('days').innerHTML = Math.floor(distance / (86400000)) + "d";
-            document.getElementById('hours').innerHTML = Math.floor((distance % 86400000) / 3600000) + "h";
-            document.getElementById('minutes').innerHTML = Math.floor((distance % 3600000) / 60000) + "m";
-            document.getElementById('seconds').innerHTML = Math.floor((distance % 60000) / 1000) + "s";
+        // Jeśli data już minęła, wyświetl komunikat
+        if (distance < 0) {
+            document.getElementById('countdown').innerHTML = "Presale has started!";
+            return;
         }
 
-        setInterval(updateTimer, 1000);
+        // Oblicz dni, godziny, minuty i sekundy
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Wyświetl licznik
+        document.getElementById('days').innerHTML = days + "d";
+        document.getElementById('hours').innerHTML = hours + "h";
+        document.getElementById('minutes').innerHTML = minutes + "m";
+        document.getElementById('seconds').innerHTML = seconds + "s";
+    }
+
+    // Uruchom licznik co 1 sekundę
+    setInterval(updateTimer, 1000);
+
+    // Wywołaj funkcję od razu, aby uniknąć opóźnienia
+    updateTimer();
+</script>
 
         // Integracja Portfela
         let provider;
