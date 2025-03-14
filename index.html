@@ -179,6 +179,7 @@
             <div id="minutes">00m</div>
             <div id="seconds">00s</div>
         </div>
+        
         <!-- Sekcja Integracji Portfela -->
 <div class="cyber-frame">
     <h2>Connect Wallet</h2>
@@ -202,6 +203,7 @@
         }
     }
 </script>
+        
         <!-- Sekcja Zakupu Tokenów -->
 <div class="cyber-frame">
     <h2>Buy DFEPE Tokens</h2>
@@ -240,6 +242,57 @@
         }
     }
 </script>
+
+        <!-- Sekcja Stakingu -->
+<div class="cyber-frame">
+    <h2>Stake DFEPE Tokens</h2>
+    <input type="number" id="stakeAmount" placeholder="DFEPE amount">
+    <button onclick="stake()">Stake</button>
+    <button onclick="unstake()">Unstake</button>
+    <div id="stakeStatus"></div>
+</div>
+
+<script>
+    async function stake() {
+        if (!provider || !account) {
+            alert("Please connect your wallet first!");
+            return;
+        }
+
+        const amount = document.getElementById('stakeAmount').value;
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid DFEPE amount.");
+            return;
+        }
+
+        const contract = new provider.eth.Contract(abi, contractAddress);
+        try {
+            document.getElementById('stakeStatus').innerText = "Processing staking...";
+            await contract.methods.stake(provider.utils.toWei(amount, 'ether'))
+                .send({ from: account });
+            document.getElementById('stakeStatus').innerText = "Tokens staked successfully!";
+        } catch (error) {
+            document.getElementById('stakeStatus').innerText = "Staking failed: " + error.message;
+        }
+    }
+
+    async function unstake() {
+        if (!provider || !account) {
+            alert("Please connect your wallet first!");
+            return;
+        }
+
+        const contract = new provider.eth.Contract(abi, contractAddress);
+        try {
+            document.getElementById('stakeStatus').innerText = "Processing unstaking...";
+            await contract.methods.unstake().send({ from: account });
+            document.getElementById('stakeStatus').innerText = "Tokens unstaked successfully!";
+        } catch (error) {
+            document.getElementById('stakeStatus').innerText = "Unstaking failed: " + error.message;
+        }
+    }
+</script>
+        
     </section>
 
     <section id="tokenomics" class="section">
