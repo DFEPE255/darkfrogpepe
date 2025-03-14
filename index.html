@@ -299,116 +299,59 @@
     <footer>
         <p>☠️ Dark Frog Army - Join the Revolution</p>
         <div style="margin-top: 1rem;">
-            <a href="#" style="color: #39FF14; margin: 0 1rem;">X</a>
-            <a href="#" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
-            <a href="#" style="color: #39FF14; margin: 0 1rem;">Facebook</a>
+            <a href="https://x.com/DarkFrogPepe?t=UjKMVtWI1g9srsw9UrVgKQ&s=09" style="color: #39FF14; margin: 0 1rem;">X</a>
+            <a href="https://t.me/dfepenews" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
+            <a href="https://www.reddit.com/u/DarkFrogPepe/s/plyWOPV3Vp" style="color: #39FF14; margin: 0 1rem;">Reddit</a>
+            <a href="https://www.facebook.com/share/1DZeaQfMQ5/" style="color: #39FF14; margin: 0 1rem;">Facebook</a>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
-<script>
-    let provider;
-    let account;
-
-    async function connectWallet() {
-        try {
-            // Sprawdź czy MetaMask lub inny portfel jest dostępny
-            if (!window.ethereum) {
-                alert("Please install MetaMask or another Web3 wallet!");
-                return;
-            }
-
-            // Inicjalizuj Web3 z nowoczesnym EIP-1193 providerem
-            provider = new Web3(window.ethereum);
-            
-            // Sprawdź czy użytkownik już autoryzował połączenie
-            const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            
-            if (accounts.length > 0) {
-                // Portfel już połączony
-                account = accounts[0];
-                updateWalletStatus();
-                return;
-            }
-
-            // Żądaj autoryzacji
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
-            account = (await provider.eth.getAccounts())[0];
-            
-            updateWalletStatus();
-            console.log("Connected account:", account);
-
-        } catch (error) {
-            // Rozszerzona obsługa błędów
-            console.error("Wallet connection error:", error);
-            
-            if (error.code === 4001) {
-                alert("Connection rejected by user!");
-            } else if (error.code === -32002) {
-                alert("Already processing request. Check your wallet!");
-            } else {
-                alert("Connection error: " + error.message);
-            }
-        }
-    }
-
-    function updateWalletStatus() {
-        const statusElement = document.getElementById('walletStatus');
-        if (account) {
-            statusElement.innerHTML = `Connected: ${account.substring(0, 6)}...${account.substring(38)}`;
-            statusElement.style.color = "#39FF14";
-        } else {
-            statusElement.innerHTML = "Not connected";
-            statusElement.style.color = "red";
-        }
-    }
-</script>
     <script>
-        // Ustaw datę startu presale (np. 15 grudnia 2024 roku o 18:00 UTC)
-    const presaleEnd = new Date('2025-04-01T00:00:00Z').getTime();
+        // Licznik czasu
+        const presaleEnd = new Date('2025-04-01T00:00:00Z').getTime();
 
-    function updateTimer() {
-        const now = new Date().getTime();
-        const distance = presaleEnd - now;
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = presaleEnd - now;
 
-        // Jeśli data już minęła, wyświetl komunikat
-        if (distance < 0) {
-            document.getElementById('countdown').innerHTML = "Presale has started!";
-            return;
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = "Presale has started!";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerHTML = days + "d";
+            document.getElementById('hours').innerHTML = hours + "h";
+            document.getElementById('minutes').innerHTML = minutes + "m";
+            document.getElementById('seconds').innerHTML = seconds + "s";
         }
 
-        // Oblicz dni, godziny, minuty i sekundy
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        // Wyświetl licznik
-        document.getElementById('days').innerHTML = days + "d";
-        document.getElementById('hours').innerHTML = hours + "h";
-        document.getElementById('minutes').innerHTML = minutes + "m";
-        document.getElementById('seconds').innerHTML = seconds + "s";
-    }
-
-    // Uruchom licznik co 1 sekundę
-    setInterval(updateTimer, 1000);
-
-    // Wywołaj funkcję od razu, aby uniknąć opóźnienia
-    updateTimer();
-</script>
+        setInterval(updateTimer, 1000);
+        updateTimer();
 
         // Integracja Portfela
         let provider;
         let account;
 
         async function connectWallet() {
-            if (window.ethereum) {
+            try {
+                if (!window.ethereum) {
+                    alert("Please install MetaMask or another Web3 wallet!");
+                    return;
+                }
+
                 provider = new Web3(window.ethereum);
-                await window.ethereum.enable();
-                account = (await provider.eth.getAccounts())[0];
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                account = accounts[0];
                 document.getElementById('walletStatus').innerText = `Connected: ${account.substring(0, 6)}...${account.substring(38)}`;
-            } else {
-                alert("Please install MetaMask!");
+            } catch (error) {
+                console.error("Wallet connection error:", error);
+                alert("Connection error: " + error.message);
             }
         }
 
@@ -417,66 +360,70 @@
         const abi = [ /* Wklej ABI kontraktu tutaj */ ];
 
         async function buyTokens() {
-            if (!provider || !account) {
-                alert("Please connect your wallet first!");
-                return;
-            }
-
-            const amount = document.getElementById('buyAmount').value;
-            const referrer = document.getElementById('referrer').value || "0x0000000000000000000000000000000000000000";
-
-            if (!amount || amount <= 0) {
-                alert("Please enter a valid ETH amount.");
-                return;
-            }
-
-            const contract = new provider.eth.Contract(abi, contractAddress);
             try {
+                if (!provider || !account) {
+                    alert("Please connect your wallet first!");
+                    return;
+                }
+
+                const amount = document.getElementById('buyAmount').value;
+                const referrer = document.getElementById('referrer').value || "0x0000000000000000000000000000000000000000";
+
+                if (!amount || amount <= 0) {
+                    alert("Please enter a valid ETH amount.");
+                    return;
+                }
+
+                const contract = new provider.eth.Contract(abi, contractAddress);
                 document.getElementById('buyStatus').innerText = "Processing transaction...";
                 await contract.methods.buyTokens(referrer)
                     .send({ from: account, value: provider.utils.toWei(amount, 'ether') });
                 document.getElementById('buyStatus').innerText = "Tokens purchased successfully!";
             } catch (error) {
+                console.error("Transaction error:", error);
                 document.getElementById('buyStatus').innerText = "Transaction failed: " + error.message;
             }
         }
 
         // Staking
         async function stake() {
-            if (!provider || !account) {
-                alert("Please connect your wallet first!");
-                return;
-            }
-
-            const amount = document.getElementById('stakeAmount').value;
-            if (!amount || amount <= 0) {
-                alert("Please enter a valid DFEPE amount.");
-                return;
-            }
-
-            const contract = new provider.eth.Contract(abi, contractAddress);
             try {
+                if (!provider || !account) {
+                    alert("Please connect your wallet first!");
+                    return;
+                }
+
+                const amount = document.getElementById('stakeAmount').value;
+                if (!amount || amount <= 0) {
+                    alert("Please enter a valid DFEPE amount.");
+                    return;
+                }
+
+                const contract = new provider.eth.Contract(abi, contractAddress);
                 document.getElementById('stakeStatus').innerText = "Processing staking...";
                 await contract.methods.stake(provider.utils.toWei(amount, 'ether'))
                     .send({ from: account });
                 document.getElementById('stakeStatus').innerText = "Tokens staked successfully!";
             } catch (error) {
+                console.error("Staking error:", error);
                 document.getElementById('stakeStatus').innerText = "Staking failed: " + error.message;
             }
         }
 
+        // Unstaking
         async function unstake() {
-            if (!provider || !account) {
-                alert("Please connect your wallet first!");
-                return;
-            }
-
-            const contract = new provider.eth.Contract(abi, contractAddress);
             try {
+                if (!provider || !account) {
+                    alert("Please connect your wallet first!");
+                    return;
+                }
+
+                const contract = new provider.eth.Contract(abi, contractAddress);
                 document.getElementById('stakeStatus').innerText = "Processing unstaking...";
                 await contract.methods.unstake().send({ from: account });
                 document.getElementById('stakeStatus').innerText = "Tokens unstaked successfully!";
             } catch (error) {
+                console.error("Unstaking error:", error);
                 document.getElementById('stakeStatus').innerText = "Unstaking failed: " + error.message;
             }
         }
