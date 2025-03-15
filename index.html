@@ -261,9 +261,14 @@
             <li>
                 <select id="languageSelector">
                     <option value="en">English</option>
-                    <option value="pl">Polski</option>
                     <option value="es">Español</option>
-                    <option value="fr">Français</option>
+                    <option value="zh">中文</option>
+                    <option value="hi">हिंदी</option>
+                    <option value="ar">العربية</option>
+                    <option value="pt">Português</option>
+                    <option value="bn">বাংলা</option>
+                    <option value="ru">Русский</option>
+                    <option value="ja">日本語</option>
                     <option value="de">Deutsch</option>
                 </select>
             </li>
@@ -389,7 +394,6 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
     <script>
         let translations = {};
 
@@ -397,6 +401,7 @@
             try {
                 const response = await fetch('translations.json');
                 translations = await response.json();
+                console.log("Translations loaded:", translations); // Log załadowanych tłumaczeń
                 translatePage('en'); // Domyślny język
             } catch (error) {
                 console.error("Error loading translations:", error);
@@ -404,16 +409,22 @@
         }
 
         function translatePage(language) {
+            console.log("Translating page to:", language); // Log wybranego języka
             const elementsToTranslate = document.querySelectorAll('[data-translate]');
             elementsToTranslate.forEach(element => {
                 const key = element.getAttribute('data-translate');
+                console.log("Translating element with key:", key); // Log klucza tłumaczenia
                 if (translations[language] && translations[language][key]) {
                     element.textContent = translations[language][key];
+                    console.log("Translated:", key, "to:", translations[language][key]); // Log przetłumaczonego tekstu
+                } else {
+                    console.warn("Translation not found for key:", key, "in language:", language); // Ostrzeżenie, jeśli tłumaczenie nie zostało znalezione
                 }
             });
         }
 
         document.getElementById('languageSelector').addEventListener('change', (event) => {
+            console.log("Language selector changed to:", event.target.value); // Log wybranego języka
             const selectedLanguage = event.target.value;
             translatePage(selectedLanguage);
         });
