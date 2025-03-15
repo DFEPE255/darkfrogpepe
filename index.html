@@ -219,6 +219,34 @@
             border-top: 1px solid #333;
         }
 
+        /* Language Switcher */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        #languageSelect {
+            background: rgba(0, 0, 0, 0.7);
+            color: #39FF14;
+            border: 1px solid #39FF14;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* RTL Support */
+        [dir="rtl"] {
+            direction: rtl;
+            text-align: right;
+        }
+
+        [dir="rtl"] .language-switcher {
+            right: auto;
+            left: 20px;
+        }
+
         @media (max-width: 768px) {
             nav ul {
                 flex-direction: column;
@@ -251,22 +279,34 @@
     </style>
 </head>
 <body>
+    <div class="language-switcher">
+        <select id="languageSelect" onchange="changeLanguage(this.value)">
+            <option value="en">English 🇺🇸</option>
+            <option value="es">Español 🇪🇸</option>
+            <option value="fr">Français 🇫🇷</option>
+            <option value="de">Deutsch 🇩🇪</option>
+            <option value="ja">日本語 🇯🇵</option>
+            <option value="pl">Polski 🇵🇱</option>
+            <!-- Add more languages as needed -->
+        </select>
+    </div>
+
     <nav>
         <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#token-description">Token Description</a></li>
-            <li><a href="#tokenomics">Tokenomics</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#whitepaper">Whitepaper</a></li>
+            <li><a href="#home" data-i18n="home">Home</a></li>
+            <li><a href="#token-description" data-i18n="tokenDesc">Token Description</a></li>
+            <li><a href="#tokenomics" data-i18n="tokenomics">Tokenomics</a></li>
+            <li><a href="#features" data-i18n="features">Features</a></li>
+            <li><a href="#whitepaper" data-i18n="whitepaper">Whitepaper</a></li>
         </ul>
     </nav>
 
     <section id="home" class="hero">
-        <h1>DARK FROG PEPE</h1>
-        <p>The Anti-Rug Memecoin Revolution</p>
+        <h1 data-i18n="title">DARK FROG PEPE</h1>
+        <p data-i18n="subtitle">The Anti-Rug Memecoin Revolution</p>
 
         <div class="countdown">
-            <h2>Presale Starts In:</h2>
+            <h2 data-i18n="presaleStarts">Presale Starts In:</h2>
             <div class="countdown-timer">
                 <div id="days">00d</div>
                 <div id="hours">00h</div>
@@ -276,102 +316,102 @@
         </div>
 
         <div class="sale-info" id="saleInfoSection">
-            <h2>Presale Progress</h2>
+            <h2 data-i18n="presaleProgress">Presale Progress</h2>
             <div class="progress-bar">
                 <div class="progress" id="progress"></div>
             </div>
-            <p>Tokens Sold: <span id="tokensSold">0%</span></p>
-            <p>Current Price: <span id="currentPrice">0.0001 ETH</span></p>
-            <p>Price Increase In: <span id="priceIncreaseTimer">00h 00m 00s</span></p>
+            <p data-i18n="tokensSold">Tokens Sold: <span id="tokensSold">0%</span></p>
+            <p data-i18n="currentPrice">Current Price: <span id="currentPrice">0.0001 ETH</span></p>
+            <p data-i18n="priceIncrease">Price Increase In: <span id="priceIncreaseTimer">00h 00m 00s</span></p>
         </div>
 
         <div class="wallet-section" id="walletSection">
-            <h2>Connect Wallet</h2>
-            <button class="cta-button" onclick="connectWallet()">Connect Wallet</button>
+            <h2 data-i18n="connectWallet">Connect Wallet</h2>
+            <button class="cta-button" onclick="connectWallet()" data-i18n="connectButton">Connect Wallet</button>
             <div id="walletStatus" class="wallet-status"></div>
         </div>
 
         <div class="buy-section" id="buySection">
-            <h2>Buy DFEPE Tokens</h2>
-            <input type="number" id="buyAmount" placeholder="ETH amount" class="input-field">
-            <input type="text" id="referrer" placeholder="Referrer address (optional)" class="input-field">
-            <button class="cta-button" id="buyButton" onclick="buyTokens()">Buy DFEPE</button>
+            <h2 data-i18n="buyTokens">Buy DFEPE Tokens</h2>
+            <input type="number" id="buyAmount" placeholder="ETH amount" class="input-field" data-i18n-placeholder="enterETH">
+            <input type="text" id="referrer" placeholder="Referrer address (optional)" class="input-field" data-i18n-placeholder="referrerAddress">
+            <button class="cta-button" id="buyButton" onclick="buyTokens()" data-i18n="buyButton">Buy DFEPE</button>
             <div id="buyStatus" class="status-message"></div>
         </div>
 
         <div class="staking-section" id="stakingSection">
-            <h2>Stake DFEPE Tokens</h2>
+            <h2 data-i18n="stakeTokens">Stake DFEPE Tokens</h2>
             <div id="stakingInfo">
-                <p>Your Staked Tokens: <span id="stakedTokens">0 DFEPE</span></p>
-                <p>Your Staking Reward: <span id="stakingReward">0 DFEPE</span></p>
+                <p data-i18n="yourStaked">Your Staked Tokens: <span id="stakedTokens">0 DFEPE</span></p>
+                <p data-i18n="yourReward">Your Staking Reward: <span id="stakingReward">0 DFEPE</span></p>
             </div>
-            <input type="number" id="stakeAmount" placeholder="DFEPE amount" class="input-field">
-            <button class="cta-button" id="stakeButton" onclick="stake()">Stake</button>
-            <button class="cta-button" id="unstakeButton" onclick="unstake()">Unstake</button>
-            <button class="cta-button" id="withdrawButton" onclick="withdraw()" style="display: none;">Withdraw Tokens & Rewards</button>
+            <input type="number" id="stakeAmount" placeholder="DFEPE amount" class="input-field" data-i18n-placeholder="stakeAmount">
+            <button class="cta-button" id="stakeButton" onclick="stake()" data-i18n="stakeButton">Stake</button>
+            <button class="cta-button" id="unstakeButton" onclick="unstake()" data-i18n="unstakeButton">Unstake</button>
+            <button class="cta-button" id="withdrawButton" onclick="withdraw()" style="display: none;" data-i18n="withdrawButton">Withdraw Tokens & Rewards</button>
             <div id="stakeStatus" class="status-message"></div>
         </div>
     </section>
 
     <section id="token-description" class="token-description">
-        <h2>☠️ Dark Frog Pepe Token ☠️</h2>
-        <p>
+        <h2 data-i18n="tokenTitle">☠️ Dark Frog Pepe Token ☠️</h2>
+        <p data-i18n="tokenDesc1">
             Where the memetic revolution meets the cybernetic abyss.
         </p>
-        <p>
+        <p data-i18n="tokenDesc2">
             In the dark corners of the decentralized metaverse, among whispering algorithms and pulsating neon lights, a new cult is born. DFEPE -- a token mutated in the depths of the crypto-universe to become a symbol of rebellion against rigid systems. Its frog eyes glow in the dark, tracking your every move on the rusted chains of blocks.
         </p>
-        <p>
+        <p data-i18n="tokenDesc3">
             Join the cyber-anarchists who stake, trade, and burn insubordination in the furnace of decentralized power. Here, there is no mercy for weak wallets -- only the dark dance of cryptographic codes and NFTs that breathe the life of their owners.
         </p>
-        <p>
+        <p data-i18n="tokenDesc4">
             Warning: In this swamp, profits evaporate faster than cybernetic LSD, and every click could be your last transaction. ☠️🔮
         </p>
-        <p>
+        <p data-i18n="tokenDesc5">
             Dive into the darkness or let the darkness dive into you.
         </p>
     </section>
 
     <section id="tokenomics" class="section">
-        <h2>🔐 Tokenomics</h2>
+        <h2 data-i18n="tokenomicsTitle">🔐 Tokenomics</h2>
         <div class="tokenomics-grid">
             <div>
-                <h3>Total Supply: 1,000,000,000,000 DFEPE</h3>
+                <h3 data-i18n="totalSupply">Total Supply: 1,000,000,000,000 DFEPE</h3>
                 <ul>
-                    <li>70% Presale (700B DFEPE)</li>
-                    <li>20% Staking (200B DFEPE)</li>
-                    <li>10% Marketing (100B DFEPE)</li>
-                    <li>Contract Address: <span id="contractAddress">0xYourContractAddress</span></li>
+                    <li data-i18n="presaleSupply">70% Presale (700B DFEPE)</li>
+                    <li data-i18n="stakingSupply">20% Staking (200B DFEPE)</li>
+                    <li data-i18n="marketingSupply">10% Marketing (100B DFEPE)</li>
+                    <li data-i18n="contractAddress">Contract Address: <span id="contractAddress">0xYourContractAddress</span></li>
                 </ul>
             </div>
         </div>
     </section>
 
     <section id="features" class="section">
-        <h2>⚡ Core Features</h2>
+        <h2 data-i18n="coreFeatures">⚡ Core Features</h2>
         <div class="tokenomics-grid">
             <div>
-                <h3>🔒 Locked Liquidity</h3>
-                <p>2-year liquidity lock via Unicrypt</p>
+                <h3 data-i18n="lockedLiquidity">🔒 Locked Liquidity</h3>
+                <p data-i18n="lockedLiquidityDesc">2-year liquidity lock via Unicrypt</p>
             </div>
             <div>
-                <h3>🎁 NFT Collection</h3>
-                <p>Exclusive Mystery Box NFTs</p>
+                <h3 data-i18n="nftCollection">🎁 NFT Collection</h3>
+                <p data-i18n="nftCollectionDesc">Exclusive Mystery Box NFTs</p>
             </div>
             <div>
-                <h3>🗳️ DAO Governance</h3>
-                <p>Community-controlled marketing</p>
+                <h3 data-i18n="daoGovernance">🗳️ DAO Governance</h3>
+                <p data-i18n="daoGovernanceDesc">Community-controlled marketing</p>
             </div>
         </div>
     </section>
 
     <section id="whitepaper" class="section">
-        <h2>📜 Whitepaper</h2>
-        <a href="docs/DFEPEWhitepaper.pdf" class="cta-button" download>Download PDF</a>
+        <h2 data-i18n="whitepaperTitle">📜 Whitepaper</h2>
+        <a href="docs/DFEPEWhitepaper.pdf" class="cta-button" download data-i18n="downloadWhitepaper">Download PDF</a>
     </section>
 
     <footer>
-        <p>☠️ Dark Frog Army - Join the Revolution ☠️</p>
+        <p data-i18n="footerText">☠️ Dark Frog Army - Join the Revolution ☠️</p>
         <div style="margin-top: 1rem;">
             <a href="https://x.com/DarkFrogPepe?t=UjKMVtWI1g9srsw9UrVgKQ&s=09" style="color: #39FF14; margin: 0 1rem;">X</a>
             <a href="https://t.me/dfepenews" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
@@ -382,65 +422,215 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
     <script>
-        const web3 = new Web3("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID");
-        const contractAddress = "0xYourContractAddress";
-        const abi = [ /* Wklej ABI kontraktu tutaj */ ];
-        const contract = new web3.eth.Contract(abi, contractAddress);
+        // Configuration
+        const DEFAULT_LANG = 'en';
+        const RTL_LANGUAGES = ['ar', 'he', 'fa', 'ur'];
+        const TRANSLATIONS = {
+            en: {
+                title: "DARK FROG PEPE",
+                subtitle: "The Anti-Rug Memecoin Revolution",
+                home: "Home",
+                tokenDesc: "Token Description",
+                tokenomics: "Tokenomics",
+                features: "Features",
+                whitepaper: "Whitepaper",
+                presaleStarts: "Presale Starts In:",
+                connectWallet: "Connect Wallet",
+                connectButton: "Connect Wallet",
+                connected: "Connected",
+                installMetaMask: "Please install MetaMask!",
+                presaleProgress: "Presale Progress",
+                tokensSold: "Tokens Sold:",
+                currentPrice: "Current Price:",
+                priceIncrease: "Price Increase In:",
+                buyTokens: "Buy DFEPE Tokens",
+                enterETH: "ETH amount",
+                referrerAddress: "Referrer address (optional)",
+                buyButton: "Buy DFEPE",
+                stakeTokens: "Stake DFEPE Tokens",
+                yourStaked: "Your Staked Tokens:",
+                yourReward: "Your Staking Reward:",
+                stakeAmount: "DFEPE amount",
+                stakeButton: "Stake",
+                unstakeButton: "Unstake",
+                withdrawButton: "Withdraw Tokens & Rewards",
+                tokenTitle: "☠️ Dark Frog Pepe Token ☠️",
+                tokenDesc1: "Where the memetic revolution meets the cybernetic abyss.",
+                tokenDesc2: "In the dark corners of the decentralized metaverse, among whispering algorithms and pulsating neon lights, a new cult is born. DFEPE -- a token mutated in the depths of the crypto-universe to become a symbol of rebellion against rigid systems. Its frog eyes glow in the dark, tracking your every move on the rusted chains of blocks.",
+                tokenDesc3: "Join the cyber-anarchists who stake, trade, and burn insubordination in the furnace of decentralized power. Here, there is no mercy for weak wallets -- only the dark dance of cryptographic codes and NFTs that breathe the life of their owners.",
+                tokenDesc4: "Warning: In this swamp, profits evaporate faster than cybernetic LSD, and every click could be your last transaction. ☠️🔮",
+                tokenDesc5: "Dive into the darkness or let the darkness dive into you.",
+                tokenomicsTitle: "🔐 Tokenomics",
+                totalSupply: "Total Supply: 1,000,000,000,000 DFEPE",
+                presaleSupply: "70% Presale (700B DFEPE)",
+                stakingSupply: "20% Staking (200B DFEPE)",
+                marketingSupply: "10% Marketing (100B DFEPE)",
+                contractAddress: "Contract Address:",
+                coreFeatures: "⚡ Core Features",
+                lockedLiquidity: "🔒 Locked Liquidity",
+                lockedLiquidityDesc: "2-year liquidity lock via Unicrypt",
+                nftCollection: "🎁 NFT Collection",
+                nftCollectionDesc: "Exclusive Mystery Box NFTs",
+                daoGovernance: "🗳️ DAO Governance",
+                daoGovernanceDesc: "Community-controlled marketing",
+                whitepaperTitle: "📜 Whitepaper",
+                downloadWhitepaper: "Download PDF",
+                footerText: "☠️ Dark Frog Army - Join the Revolution ☠️"
+            },
+            es: {
+                title: "RANA OSCURA PEPE",
+                subtitle: "La Revolución Memecoin Anti-Estafa",
+                home: "Inicio",
+                tokenDesc: "Descripción del Token",
+                tokenomics: "Tokenomics",
+                features: "Características",
+                whitepaper: "Documento Técnico",
+                presaleStarts: "Preventa Comienza En:",
+                connectWallet: "Conectar Cartera",
+                connectButton: "Conectar Cartera",
+                connected: "Conectado",
+                installMetaMask: "¡Instala MetaMask!",
+                presaleProgress: "Progreso de Preventa",
+                tokensSold: "Tokens Vendidos:",
+                currentPrice: "Precio Actual:",
+                priceIncrease: "Aumento de Precio En:",
+                buyTokens: "Comprar Tokens DFEPE",
+                enterETH: "Cantidad de ETH",
+                referrerAddress: "Dirección del Referido (opcional)",
+                buyButton: "Comprar DFEPE",
+                stakeTokens: "Staking de Tokens DFEPE",
+                yourStaked: "Tus Tokens en Staking:",
+                yourReward: "Tu Recompensa de Staking:",
+                stakeAmount: "Cantidad de DFEPE",
+                stakeButton: "Staking",
+                unstakeButton: "Retirar Staking",
+                withdrawButton: "Retirar Tokens y Recompensas",
+                tokenTitle: "☠️ Token Rana Oscura Pepe ☠️",
+                tokenDesc1: "Donde la revolución memética se encuentra con el abismo cibernético.",
+                tokenDesc2: "En los rincones oscuros del metaverso descentralizado, entre algoritmos susurrantes y luces de neón pulsantes, nace un nuevo culto. DFEPE: un token mutado en las profundidades del universo criptográfico para convertirse en un símbolo de rebelión contra sistemas rígidos. Sus ojos de rana brillan en la oscuridad, siguiendo cada uno de tus movimientos en las cadenas oxidadas de bloques.",
+                tokenDesc3: "Únete a los ciberanarquistas que hacen staking, comercian y queman la insubordinación en el horno del poder descentralizado. Aquí no hay piedad para las billeteras débiles, solo el baile oscuro de códigos criptográficos y NFTs que respiran la vida de sus dueños.",
+                tokenDesc4: "Advertencia: En este pantano, las ganancias se evaporan más rápido que el LSD cibernético, y cada clic podría ser tu última transacción. ☠️🔮",
+                tokenDesc5: "Sumérgete en la oscuridad o deja que la oscuridad se sumerja en ti.",
+                tokenomicsTitle: "🔐 Tokenomics",
+                totalSupply: "Suministro Total: 1,000,000,000,000 DFEPE",
+                presaleSupply: "70% Preventa (700B DFEPE)",
+                stakingSupply: "20% Staking (200B DFEPE)",
+                marketingSupply: "10% Marketing (100B DFEPE)",
+                contractAddress: "Dirección del Contrato:",
+                coreFeatures: "⚡ Características Principales",
+                lockedLiquidity: "🔒 Liquidez Bloqueada",
+                lockedLiquidityDesc: "Bloqueo de liquidez de 2 años a través de Unicrypt",
+                nftCollection: "🎁 Colección NFT",
+                nftCollectionDesc: "NFTs de Caja Misteriosa Exclusiva",
+                daoGovernance: "🗳️ Gobernanza DAO",
+                daoGovernanceDesc: "Marketing controlado por la comunidad",
+                whitepaperTitle: "📜 Documento Técnico",
+                downloadWhitepaper: "Descargar PDF",
+                footerText: "☠️ Ejército de la Rana Oscura - Únete a la Revolución ☠️"
+            },
+            // Add more languages as needed
+        };
 
-        async function checkPresaleStatus() {
-            try {
-                const presaleStartTime = await contract.methods.presaleStartTime().call();
-                const now = Math.floor(Date.now() / 1000);
+        // State
+        let currentLang = DEFAULT_LANG;
+        let isRTL = false;
+        let web3;
+        let account;
 
-                if (presaleStartTime > 0 && now <= presaleStartTime + 90 * 24 * 3600) {
-                    document.getElementById('saleInfoSection').style.display = 'block';
-                    document.getElementById('walletSection').style.display = 'block';
-                    document.getElementById('buySection').style.display = 'block';
-                    document.getElementById('stakingSection').style.display = 'block';
-                    updateSaleInfo();
-                }
-            } catch (error) {
-                console.error("Error checking presale status:", error);
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            detectBrowserLanguage();
+            setupLanguageSelector();
+            applyTranslations();
+            initWeb3();
+        });
+
+        // Language Management
+        function detectBrowserLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const langCode = browserLang.split('-')[0];
+            if (TRANSLATIONS[langCode]) {
+                currentLang = langCode;
             }
         }
 
-        async function updateSaleInfo() {
-            try {
-                const totalTokens = await contract.methods.TOTAL_SUPPLY().call();
-                const soldTokens = await contract.methods.tokensSold().call();
-                const currentPrice = await contract.methods.getCurrentRate().call();
-                const presaleStartTime = await contract.methods.presaleStartTime().call();
-                const now = Math.floor(Date.now() / 1000);
+        function setupLanguageSelector() {
+            const select = document.getElementById('languageSelect');
+            select.innerHTML = Object.entries(TRANSLATIONS).map(([code, data]) => `
+                <option value="${code}" ${code === currentLang ? 'selected' : ''}>
+                    ${data.languageName || code.toUpperCase()} ${data.flag || ''}
+                </option>
+            `).join('');
+        }
 
-                const tokensSoldPercent = (soldTokens / totalTokens) * 100;
-                document.getElementById('progress').style.width = tokensSoldPercent + '%';
-                document.getElementById('tokensSold').innerText = tokensSoldPercent.toFixed(2) + '%';
+        function changeLanguage(lang) {
+            if (!TRANSLATIONS[lang]) return;
+            
+            currentLang = lang;
+            document.documentElement.lang = lang;
+            
+            // Handle RTL
+            isRTL = RTL_LANGUAGES.includes(lang);
+            document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+            
+            applyTranslations();
+            updateDynamicContent();
+        }
 
-                document.getElementById('currentPrice').innerText = web3.utils.fromWei(currentPrice.toString(), 'ether') + ' ETH';
+        function applyTranslations() {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const translation = TRANSLATIONS[currentLang][key] || key;
+                element.innerHTML = translation;
+            });
 
-                const weeksPassed = Math.floor((now - presaleStartTime) / (7 * 24 * 3600));
-                const nextPriceChange = presaleStartTime + (weeksPassed + 1) * 7 * 24 * 3600;
-                const timeLeft = nextPriceChange - now;
+            document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+                const key = element.getAttribute('data-i18n-placeholder');
+                const translation = TRANSLATIONS[currentLang][key] || key;
+                element.setAttribute('placeholder', translation);
+            });
+        }
 
-                if (timeLeft < 0) {
-                    document.getElementById('priceIncreaseTimer').innerText = "Price increased!";
-                } else {
-                    const hours = Math.floor(timeLeft / 3600);
-                    const minutes = Math.floor((timeLeft % 3600) / 60);
-                    const seconds = timeLeft % 60;
-                    document.getElementById('priceIncreaseTimer').innerText = `${hours}h ${minutes}m ${seconds}s`;
-                }
-            } catch (error) {
-                console.error("Error fetching data from contract:", error);
+        function updateDynamicContent() {
+            if (account) {
+                const walletStatus = document.getElementById('walletStatus');
+                walletStatus.innerHTML = `✅ ${TRANSLATIONS[currentLang].connected}: 
+                    ${account.substring(0,6)}...${account.substring(38)}`;
             }
         }
 
-        window.addEventListener('load', checkPresaleStatus);
-        setInterval(() => {
-            if (document.getElementById('saleInfoSection').style.display === 'block') {
-                updateSaleInfo();
+        // Web3 Integration
+        async function initWeb3() {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                try {
+                    await window.ethereum.enable();
+                    const accounts = await web3.eth.getAccounts();
+                    account = accounts[0];
+                    updateDynamicContent();
+                } catch (error) {
+                    console.error("User denied account access");
+                }
+            } else {
+                console.log("Please install MetaMask!");
             }
-        }, 5000);
+        }
+
+        async function connectWallet() {
+            if (!window.ethereum) {
+                document.getElementById('walletStatus').innerHTML = 
+                    `⚠️ ${TRANSLATIONS[currentLang].installMetaMask}`;
+                return;
+            }
+
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                account = accounts[0];
+                updateDynamicContent();
+            } catch (error) {
+                document.getElementById('walletStatus').innerHTML = "❌ Connection Error";
+            }
+        }
     </script>
 </body>
 </html>
