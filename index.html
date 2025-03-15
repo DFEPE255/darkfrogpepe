@@ -12,7 +12,6 @@
             box-sizing: border-box;
         }
 
-        /* Dynamiczne tło gradientowe */
         body {
             font-family: 'Courier New', monospace;
             color: white;
@@ -28,7 +27,6 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* Nawigacja */
         nav {
             background: rgba(0, 0, 0, 0.9);
             padding: 1rem;
@@ -58,7 +56,6 @@
             text-shadow: 0 0 10px #39FF14;
         }
 
-        /* Sekcja główna */
         .hero {
             text-align: center;
             padding: 6rem 1rem;
@@ -122,7 +119,7 @@
         .wallet-section, .buy-section, .staking-section, .sale-info {
             text-align: center;
             margin: 2rem 0;
-            display: none; /* Domyślnie ukryte */
+            display: none;
         }
 
         .input-field {
@@ -143,7 +140,6 @@
             color: #39FF14;
         }
 
-        /* Sekcja Informacji o Sprzedaży */
         .sale-info {
             text-align: center;
             margin: 2rem 0;
@@ -172,7 +168,6 @@
             margin: 0.5rem 0;
         }
 
-        /* Sekcja Opisu Tokenu */
         .token-description {
             padding: 4rem 1rem;
             max-width: 1200px;
@@ -192,7 +187,6 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Sekcje */
         .section {
             padding: 4rem 1rem;
             max-width: 1200px;
@@ -219,14 +213,12 @@
             border: 1px solid #39FF14;
         }
 
-        /* Stopka */
         footer {
             text-align: center;
             padding: 3rem 1rem;
             border-top: 1px solid #333;
         }
 
-        /* Responsywność */
         @media (max-width: 768px) {
             nav ul {
                 flex-direction: column;
@@ -273,7 +265,6 @@
         <h1>DARK FROG PEPE</h1>
         <p>The Anti-Rug Memecoin Revolution</p>
 
-        <!-- Sekcja Countdown -->
         <div class="countdown">
             <h2>Presale Starts In:</h2>
             <div class="countdown-timer">
@@ -284,7 +275,6 @@
             </div>
         </div>
 
-        <!-- Sekcja Informacji o Sprzedaży (domyślnie ukryta) -->
         <div class="sale-info" id="saleInfoSection">
             <h2>Presale Progress</h2>
             <div class="progress-bar">
@@ -295,14 +285,12 @@
             <p>Price Increase In: <span id="priceIncreaseTimer">00h 00m 00s</span></p>
         </div>
 
-        <!-- Sekcja Integracji Portfela (domyślnie ukryta) -->
         <div class="wallet-section" id="walletSection">
             <h2>Connect Wallet</h2>
             <button class="cta-button" onclick="connectWallet()">Connect Wallet</button>
             <div id="walletStatus" class="wallet-status"></div>
         </div>
 
-        <!-- Sekcja Zakupu Tokenów (domyślnie ukryta) -->
         <div class="buy-section" id="buySection">
             <h2>Buy DFEPE Tokens</h2>
             <input type="number" id="buyAmount" placeholder="ETH amount" class="input-field">
@@ -311,7 +299,6 @@
             <div id="buyStatus" class="status-message"></div>
         </div>
 
-        <!-- Sekcja Stakingu (domyślnie ukryta) -->
         <div class="staking-section" id="stakingSection">
             <h2>Stake DFEPE Tokens</h2>
             <div id="stakingInfo">
@@ -326,7 +313,6 @@
         </div>
     </section>
 
-    <!-- Sekcja Opisu Tokenu -->
     <section id="token-description" class="token-description">
         <h2>☠️ Dark Frog Pepe Token ☠️</h2>
         <p>
@@ -346,16 +332,15 @@
         </p>
     </section>
 
-    <!-- Sekcja Tokenomics -->
     <section id="tokenomics" class="section">
         <h2>🔐 Tokenomics</h2>
         <div class="tokenomics-grid">
             <div>
                 <h3>Total Supply: 1,000,000,000,000 DFEPE</h3>
                 <ul>
-                    <li>70% Presale (700B)</li>
-                    <li>20% Marketing (200B)</li>
-                    <li>10% Development (100B)</li>
+                    <li>70% Presale (700B DFEPE)</li>
+                    <li>20% Staking (200B DFEPE)</li>
+                    <li>10% Marketing (100B DFEPE)</li>
                     <li>Contract Address: <span id="contractAddress">0xYourContractAddress</span></li>
                 </ul>
             </div>
@@ -397,96 +382,45 @@
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
     <script>
-        // Inicjalizacja Web3 (bez konieczności logowania)
-        const web3 = new Web3("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID"); // Użyj Infura lub innego dostawcy node'ów
-
-        // Adres i ABI kontraktu
-        const contractAddress = "0xYourContractAddress"; // Zastąp prawdziwym adresem kontraktu
+        const web3 = new Web3("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID");
+        const contractAddress = "0xYourContractAddress";
         const abi = [ /* Wklej ABI kontraktu tutaj */ ];
-
-        // Inicjalizacja kontraktu
         const contract = new web3.eth.Contract(abi, contractAddress);
 
-        // Funkcja do sprawdzenia, czy pre-sale się rozpoczął
         async function checkPresaleStatus() {
             try {
-                const presaleStartTime = await contract.methods.getPresaleStartTime().call(); // Zakładamy, że kontrakt ma taką metodę
-                const presaleEndTime = await contract.methods.getPresaleEndTime().call(); // Zakładamy, że kontrakt ma taką metodę
-                const now = Math.floor(Date.now() / 1000); // Czas w sekundach
+                const presaleStartTime = await contract.methods.presaleStartTime().call();
+                const now = Math.floor(Date.now() / 1000);
 
-                if (now >= presaleStartTime && now <= presaleEndTime) {
-                    // Jeśli pre-sale trwa, pokaż sekcje
+                if (presaleStartTime > 0 && now <= presaleStartTime + 90 * 24 * 3600) {
                     document.getElementById('saleInfoSection').style.display = 'block';
                     document.getElementById('walletSection').style.display = 'block';
                     document.getElementById('buySection').style.display = 'block';
                     document.getElementById('stakingSection').style.display = 'block';
-                    updateSaleInfo(); // Rozpocznij aktualizację informacji
-                } else if (now > presaleEndTime) {
-                    // Jeśli pre-sale się zakończył, ukryj przycisk Buy i Staking
-                    document.getElementById('buyButton').style.display = 'none';
-                    document.getElementById('stakeButton').style.display = 'none';
-                    document.getElementById('unstakeButton').style.display = 'none';
-
-                    // Sprawdź, czy minął miesiąc od zakończenia pre-sale
-                    const oneMonthAfterPresaleEnd = presaleEndTime + 30 * 24 * 60 * 60; // 30 dni w sekundach
-                    if (now >= oneMonthAfterPresaleEnd) {
-                        // Jeśli minął miesiąc, pokaż przycisk wypłaty
-                        document.getElementById('withdrawButton').style.display = 'block';
-                        document.getElementById('stakeButton').style.display = 'none';
-                        document.getElementById('unstakeButton').style.display = 'none';
-                    }
-
-                    // Pokaż informacje o stakowanych tokenach i nagrodzie
-                    const stakedTokens = await contract.methods.getStakedTokens(account).call(); // Zakładamy, że kontrakt ma taką metodę
-                    const stakingReward = await contract.methods.getStakingReward(account).call(); // Zakładamy, że kontrakt ma taką metodę
-                    document.getElementById('stakedTokens').innerText = stakedTokens;
-                    document.getElementById('stakingReward').innerText = stakingReward;
+                    updateSaleInfo();
                 }
             } catch (error) {
                 console.error("Error checking presale status:", error);
             }
         }
 
-        // Funkcja do wypłaty tokenów i nagród
-        async function withdraw() {
-            try {
-                if (!provider || !account) {
-                    alert("Please connect your wallet first!");
-                    return;
-                }
-
-                const contract = new provider.eth.Contract(abi, contractAddress);
-                document.getElementById('stakeStatus').innerText = "Processing withdrawal...";
-                await contract.methods.withdraw().send({ from: account });
-                document.getElementById('stakeStatus').innerText = "Tokens and rewards withdrawn successfully!";
-            } catch (error) {
-                console.error("Withdrawal error:", error);
-                document.getElementById('stakeStatus').innerText = "Withdrawal failed: " + error.message;
-            }
-        }
-
-        // Funkcja do aktualizacji informacji o sprzedaży
         async function updateSaleInfo() {
             try {
-                // Pobierz dane z kontraktu
-                const totalTokens = await contract.methods.totalSupply().call();
+                const totalTokens = await contract.methods.TOTAL_SUPPLY().call();
                 const soldTokens = await contract.methods.tokensSold().call();
-                const currentPrice = await contract.methods.getCurrentPrice().call(); // Zakładamy, że kontrakt ma taką metodę
-                const priceIncreaseTime = await contract.methods.getPriceIncreaseTime().call(); // Zakładamy, że kontrakt ma taką metodę
+                const currentPrice = await contract.methods.getCurrentRate().call();
+                const presaleStartTime = await contract.methods.presaleStartTime().call();
+                const now = Math.floor(Date.now() / 1000);
 
-                // Oblicz procent sprzedanych tokenów
                 const tokensSoldPercent = (soldTokens / totalTokens) * 100;
-
-                // Aktualizuj pasek postępu
                 document.getElementById('progress').style.width = tokensSoldPercent + '%';
                 document.getElementById('tokensSold').innerText = tokensSoldPercent.toFixed(2) + '%';
 
-                // Aktualizuj cenę tokena (konwersja z wei na ETH)
-                document.getElementById('currentPrice').innerText = web3.utils.fromWei(currentPrice, 'ether') + ' ETH';
+                document.getElementById('currentPrice').innerText = web3.utils.fromWei(currentPrice.toString(), 'ether') + ' ETH';
 
-                // Aktualizuj czas do zmiany ceny
-                const now = Math.floor(Date.now() / 1000); // Czas w sekundach
-                const timeLeft = priceIncreaseTime - now;
+                const weeksPassed = Math.floor((now - presaleStartTime) / (7 * 24 * 3600));
+                const nextPriceChange = presaleStartTime + (weeksPassed + 1) * 7 * 24 * 3600;
+                const timeLeft = nextPriceChange - now;
 
                 if (timeLeft < 0) {
                     document.getElementById('priceIncreaseTimer').innerText = "Price increased!";
@@ -501,10 +435,7 @@
             }
         }
 
-        // Sprawdź status pre-sale po załadowaniu strony
         window.addEventListener('load', checkPresaleStatus);
-
-        // Aktualizuj informacje co 5 sekund (jeśli pre-sale się rozpoczął)
         setInterval(() => {
             if (document.getElementById('saleInfoSection').style.display === 'block') {
                 updateSaleInfo();
