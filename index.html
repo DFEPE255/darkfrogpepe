@@ -219,7 +219,7 @@
             border-top: 1px solid #333;
         }
 
-        /* Google Translate Widget Styling */
+        /* Hide Google Translate Widget */
         .goog-te-banner-frame {
             display: none !important; /* Hide the Google Translate banner */
         }
@@ -229,12 +229,7 @@
         }
 
         .goog-te-gadget .goog-te-combo {
-            background: rgba(0, 0, 0, 0.7);
-            color: #39FF14;
-            border: 1px solid #39FF14;
-            padding: 8px 12px;
-            border-radius: 5px;
-            cursor: pointer;
+            display: none; /* Hide the language selector dropdown */
         }
 
         /* Language Switcher */
@@ -313,8 +308,8 @@
     </style>
 </head>
 <body>
-    <!-- Google Translate Widget -->
-    <div id="google_translate_element"></div>
+    <!-- Google Translate Widget (Hidden) -->
+    <div id="google_translate_element" style="display: none;"></div>
 
     <div class="language-switcher">
         <select id="languageSelect" onchange="changeLanguage(this.value)">
