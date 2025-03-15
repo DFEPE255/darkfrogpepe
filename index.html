@@ -1,446 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dark Frog Pepe | Anti-Rug Memecoin</title>
-    <style>
-        /* Reset CSS */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Courier New', monospace;
-            color: white;
-            min-height: 100vh;
-            background: linear-gradient(45deg, #0a0a0a, #001100, #0a0a0a);
-            background-size: 400% 400%;
-            animation: gradientFlow 15s ease infinite;
-        }
-
-        @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        nav {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 1rem;
-            position: sticky;
-            top: 0;
-            border-bottom: 2px solid #39FF14;
-            z-index: 100;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 3rem;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav a {
-            color: #39FF14;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        nav a:hover {
-            text-shadow: 0 0 10px #39FF14;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 6rem 1rem;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
-
-        .countdown {
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        .countdown h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
-        }
-
-        .countdown-timer {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .countdown-timer div {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 1rem;
-            border-radius: 10px;
-            border: 1px solid #39FF14;
-            min-width: 80px;
-        }
-
-        .cta-button {
-            background: #39FF14;
-            color: #000;
-            padding: 1rem 3rem;
-            border: none;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            font-weight: bold;
-        }
-
-        .cta-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px #39FF14;
-        }
-
-        .wallet-section, .buy-section, .staking-section, .sale-info {
-            text-align: center;
-            margin: 2rem 0;
-            display: none;
-        }
-
-        .input-field {
-            width: 80%;
-            max-width: 300px;
-            padding: 0.8rem;
-            margin: 0.5rem 0;
-            border: 1px solid #39FF14;
-            border-radius: 5px;
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            font-family: 'Courier New', monospace;
-        }
-
-        .status-message, .wallet-status {
-            margin-top: 1rem;
-            font-size: 1rem;
-            color: #39FF14;
-        }
-
-        .sale-info {
-            text-align: center;
-            margin: 2rem 0;
-        }
-
-        .progress-bar {
-            width: 80%;
-            max-width: 500px;
-            height: 20px;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            border: 1px solid #39FF14;
-            margin: 1rem auto;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background: #39FF14;
-            width: 0%;
-            transition: width 0.5s ease;
-        }
-
-        .sale-info p {
-            font-size: 1.1rem;
-            margin: 0.5rem 0;
-        }
-
-        .token-description {
-            padding: 4rem 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .token-description h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
-        }
-
-        .token-description p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-
-        .section {
-            padding: 4rem 1rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section h2 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-            text-shadow: 0 0 10px rgba(57, 255, 20, 0.8);
-        }
-
-        .tokenomics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .tokenomics-grid div {
-            background: rgba(0, 0, 0, 0.5);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border: 1px solid #39FF14;
-        }
-
-        footer {
-            text-align: center;
-            padding: 3rem 1rem;
-            border-top: 1px solid #333;
-        }
-
-        @media (max-width: 768px) {
-            nav ul {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
-            }
-
-            .hero h1 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .countdown-timer {
-                font-size: 1.2rem;
-                gap: 1rem;
-            }
-
-            .countdown-timer div {
-                min-width: 60px;
-                padding: 0.8rem;
-            }
-
-            .section h2 {
-                font-size: 1.5rem;
-            }
-        }
-    </style>
+    <!-- ... (pozostała część head taka sama) ... -->
 </head>
 <body>
-    <nav>
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#token-description">Token Description</a></li>
-            <li><a href="#tokenomics">Tokenomics</a></li>
-            <li><a href="#features">Features</a></li>
-            <li><a href="#whitepaper">Whitepaper</a></li>
-        </ul>
-    </nav>
-
-    <section id="home" class="hero">
-        <h1>DARK FROG PEPE</h1>
-        <p>The Anti-Rug Memecoin Revolution</p>
-
-        <div class="countdown">
-            <h2>Presale Starts In:</h2>
-            <div class="countdown-timer">
-                <div id="days">00d</div>
-                <div id="hours">00h</div>
-                <div id="minutes">00m</div>
-                <div id="seconds">00s</div>
-            </div>
-        </div>
-
-        <div class="sale-info" id="saleInfoSection">
-            <h2>Presale Progress</h2>
-            <div class="progress-bar">
-                <div class="progress" id="progress"></div>
-            </div>
-            <p>Tokens Sold: <span id="tokensSold">0%</span></p>
-            <p>Current Price: <span id="currentPrice">0.0001 ETH</span></p>
-            <p>Price Increase In: <span id="priceIncreaseTimer">00h 00m 00s</span></p>
-        </div>
-
-        <div class="wallet-section" id="walletSection">
-            <h2>Connect Wallet</h2>
-            <button class="cta-button" onclick="connectWallet()">Connect Wallet</button>
-            <div id="walletStatus" class="wallet-status"></div>
-        </div>
-
-        <div class="buy-section" id="buySection">
-            <h2>Buy DFEPE Tokens</h2>
-            <input type="number" id="buyAmount" placeholder="ETH amount" class="input-field">
-            <input type="text" id="referrer" placeholder="Referrer address (optional)" class="input-field">
-            <button class="cta-button" id="buyButton" onclick="buyTokens()">Buy DFEPE</button>
-            <div id="buyStatus" class="status-message"></div>
-        </div>
-
-        <div class="staking-section" id="stakingSection">
-            <h2>Stake DFEPE Tokens</h2>
-            <div id="stakingInfo">
-                <p>Your Staked Tokens: <span id="stakedTokens">0 DFEPE</span></p>
-                <p>Your Staking Reward: <span id="stakingReward">0 DFEPE</span></p>
-            </div>
-            <input type="number" id="stakeAmount" placeholder="DFEPE amount" class="input-field">
-            <button class="cta-button" id="stakeButton" onclick="stake()">Stake</button>
-            <button class="cta-button" id="unstakeButton" onclick="unstake()">Unstake</button>
-            <button class="cta-button" id="withdrawButton" onclick="withdraw()" style="display: none;">Withdraw Tokens & Rewards</button>
-            <div id="stakeStatus" class="status-message"></div>
-        </div>
-    </section>
-
-    <section id="token-description" class="token-description">
-        <h2>☠️ Dark Frog Pepe Token ☠️</h2>
-        <p>
-            Where the memetic revolution meets the cybernetic abyss.
-        </p>
-        <p>
-            In the dark corners of the decentralized metaverse, among whispering algorithms and pulsating neon lights, a new cult is born. DFEPE -- a token mutated in the depths of the crypto-universe to become a symbol of rebellion against rigid systems. Its frog eyes glow in the dark, tracking your every move on the rusted chains of blocks.
-        </p>
-        <p>
-            Join the cyber-anarchists who stake, trade, and burn insubordination in the furnace of decentralized power. Here, there is no mercy for weak wallets -- only the dark dance of cryptographic codes and NFTs that breathe the life of their owners.
-        </p>
-        <p>
-            Warning: In this swamp, profits evaporate faster than cybernetic LSD, and every click could be your last transaction. ☠️🔮
-        </p>
-        <p>
-            Dive into the darkness or let the darkness dive into you.
-        </p>
-    </section>
-
-    <section id="tokenomics" class="section">
-        <h2>🔐 Tokenomics</h2>
-        <div class="tokenomics-grid">
-            <div>
-                <h3>Total Supply: 1,000,000,000,000 DFEPE</h3>
-                <ul>
-                    <li>70% Presale (700B DFEPE)</li>
-                    <li>20% Staking (200B DFEPE)</li>
-                    <li>10% Marketing (100B DFEPE)</li>
-                    <li>Contract Address: <span id="contractAddress">0xYourContractAddress</span></li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <section id="features" class="section">
-        <h2>⚡ Core Features</h2>
-        <div class="tokenomics-grid">
-            <div>
-                <h3>🔒 Locked Liquidity</h3>
-                <p>2-year liquidity lock via Unicrypt</p>
-            </div>
-            <div>
-                <h3>🎁 NFT Collection</h3>
-                <p>Exclusive Mystery Box NFTs</p>
-            </div>
-            <div>
-                <h3>🗳️ DAO Governance</h3>
-                <p>Community-controlled marketing</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="whitepaper" class="section">
-        <h2>📜 Whitepaper</h2>
-        <a href="docs/DFEPEWhitepaper.pdf" class="cta-button" download>Download PDF</a>
-    </section>
-
-    <footer>
-        <p>☠️ Dark Frog Army - Join the Revolution ☠️</p>
-        <div style="margin-top: 1rem;">
-            <a href="https://x.com/DarkFrogPepe?t=UjKMVtWI1g9srsw9UrVgKQ&s=09" style="color: #39FF14; margin: 0 1rem;">X</a>
-            <a href="https://t.me/dfepenews" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
-            <a href="https://www.reddit.com/u/DarkFrogPepe/s/plyWOPV3Vp" style="color: #39FF14; margin: 0 1rem;">Reddit</a>
-            <a href="https://www.facebook.com/share/1DZeaQfMQ5/" style="color: #39FF14; margin: 0 1rem;">Facebook</a>
-        </div>
-    </footer>
+    <!-- ... (pozostała część HTML taka sama) ... -->
 
     <script src="https://cdn.jsdelivr.net/npm/web3@1.7.3/dist/web3.min.js"></script>
     <script>
-        const web3 = new Web3("https://mainnet.infura.io/v3/YOUR_INFURA_PROJECT_ID");
-        const contractAddress = "0xYourContractAddress";
-        const abi = [ /* Wklej ABI kontraktu tutaj */ ];
-        const contract = new web3.eth.Contract(abi, contractAddress);
+        let web3;
+        let contract;
+        let account;
+        
+        // Konfiguracja - zmień te wartości!
+        const CONTRACT_ADDRESS = "0xYourContractAddress"; 
+        const INFURA_ID = "YOUR_INFURA_PROJECT_ID";
+        const CONTRACT_ABI = [ /* WKLEJ TUTAJ PEŁNE ABI KONTRAKTU */ ];
 
-        async function checkPresaleStatus() {
-            try {
-                const presaleStartTime = await contract.methods.presaleStartTime().call();
-                const now = Math.floor(Date.now() / 1000);
-
-                if (presaleStartTime > 0 && now <= presaleStartTime + 90 * 24 * 3600) {
-                    document.getElementById('saleInfoSection').style.display = 'block';
-                    document.getElementById('walletSection').style.display = 'block';
-                    document.getElementById('buySection').style.display = 'block';
-                    document.getElementById('stakingSection').style.display = 'block';
-                    updateSaleInfo();
+        // Inicjalizacja Web3
+        async function initWeb3() {
+            if(window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                try {
+                    await window.ethereum.enable();
+                    loadContract();
+                    return true;
+                } catch (error) {
+                    console.error("User denied account access");
+                    return false;
                 }
-            } catch (error) {
-                console.error("Error checking presale status:", error);
+            } else {
+                console.log("Using Infura");
+                web3 = new Web3(new Web3.providers.HttpProvider(`https://mainnet.infura.io/v3/${INFURA_ID}`));
+                loadContract();
+                return true;
             }
+        }
+
+        function loadContract() {
+            contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+            updateUI();
+        }
+
+        // Portfel
+        async function connectWallet() {
+            if(!window.ethereum) {
+                document.getElementById('walletStatus').innerHTML = "⚠️ Instaluj MetaMask!";
+                return;
+            }
+            
+            try {
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                account = accounts[0];
+                document.getElementById('walletStatus').innerHTML = `✅ Podłączono: ${account.substring(0,6)}...${account.substring(38)}`;
+                updateUI();
+            } catch (error) {
+                document.getElementById('walletStatus').innerHTML = "❌ Błąd łączenia";
+            }
+        }
+
+        // Zakup tokenów
+        async function buyTokens() {
+            const amount = document.getElementById('buyAmount').value;
+            const referrer = document.getElementById('referrer').value || account;
+            
+            if(!amount || amount <= 0) {
+                document.getElementById('buyStatus').innerHTML = "⚠️ Wpisz kwotę ETH";
+                return;
+            }
+
+            try {
+                const weiAmount = web3.utils.toWei(amount, 'ether');
+                await contract.methods.buyTokens().send({
+                    from: account,
+                    value: weiAmount
+                });
+                document.getElementById('buyStatus').innerHTML = "✅ Zakup udany!";
+                updateSaleInfo();
+            } catch (error) {
+                document.getElementById('buyStatus').innerHTML = `❌ Błąd: ${error.message}`;
+            }
+        }
+
+        // Staking
+        async function stake() {
+            const amount = document.getElementById('stakeAmount').value;
+            if(!amount || amount <= 0) return;
+
+            try {
+                const weiAmount = web3.utils.toWei(amount, 'ether');
+                await contract.methods.stakeTokens(weiAmount).send({ from: account });
+                updateStakingInfo();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        async function unstake() {
+            try {
+                await contract.methods.unstakeTokens().send({ from: account });
+                updateStakingInfo();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+
+        // Aktualizacja UI
+        async function updateStakingInfo() {
+            const staked = await contract.methods.stakedBalances(account).call();
+            document.getElementById('stakedTokens').innerText = web3.utils.fromWei(staked, 'ether') + " DFEPE";
         }
 
         async function updateSaleInfo() {
             try {
-                const totalTokens = await contract.methods.TOTAL_SUPPLY().call();
-                const soldTokens = await contract.methods.tokensSold().call();
-                const currentPrice = await contract.methods.getCurrentRate().call();
-                const presaleStartTime = await contract.methods.presaleStartTime().call();
-                const now = Math.floor(Date.now() / 1000);
+                const tokensSold = await contract.methods.tokensSold().call();
+                const totalSupply = await contract.methods.PRESALE_SUPPLY().call();
+                const percent = (tokensSold / totalSupply * 100).toFixed(2);
+                document.getElementById('progress').style.width = percent + '%';
+                document.getElementById('tokensSold').innerText = percent + '%';
 
-                const tokensSoldPercent = (soldTokens / totalTokens) * 100;
-                document.getElementById('progress').style.width = tokensSoldPercent + '%';
-                document.getElementById('tokensSold').innerText = tokensSoldPercent.toFixed(2) + '%';
-
-                document.getElementById('currentPrice').innerText = web3.utils.fromWei(currentPrice.toString(), 'ether') + ' ETH';
-
-                const weeksPassed = Math.floor((now - presaleStartTime) / (7 * 24 * 3600));
-                const nextPriceChange = presaleStartTime + (weeksPassed + 1) * 7 * 24 * 3600;
-                const timeLeft = nextPriceChange - now;
-
-                if (timeLeft < 0) {
-                    document.getElementById('priceIncreaseTimer').innerText = "Price increased!";
-                } else {
-                    const hours = Math.floor(timeLeft / 3600);
-                    const minutes = Math.floor((timeLeft % 3600) / 60);
-                    const seconds = timeLeft % 60;
-                    document.getElementById('priceIncreaseTimer').innerText = `${hours}h ${minutes}m ${seconds}s`;
-                }
+                const price = await contract.methods.getTokensPerETH().call();
+                document.getElementById('currentPrice').innerText = web3.utils.fromWei(price, 'ether') + " DFEPE/ETH";
             } catch (error) {
-                console.error("Error fetching data from contract:", error);
+                console.error(error);
             }
         }
 
-        window.addEventListener('load', checkPresaleStatus);
-        setInterval(() => {
-            if (document.getElementById('saleInfoSection').style.display === 'block') {
-                updateSaleInfo();
+        // Automatyczne odświeżanie
+        window.addEventListener('load', async () => {
+            const connected = await initWeb3();
+            if(connected) {
+                setInterval(updateSaleInfo, 10000);
+                setInterval(updateStakingInfo, 10000);
             }
-        }, 5000);
+        });
     </script>
 </body>
 </html>
