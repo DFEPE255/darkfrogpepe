@@ -307,23 +307,28 @@
             <h2>Buy DFEPE Tokens</h2>
             <input type="number" id="buyAmount" placeholder="ETH amount" class="input-field">
             <input type="text" id="referrer" placeholder="Referrer address (optional)" class="input-field">
-            <button class="cta-button" onclick="buyTokens()">Buy DFEPE</button>
+            <button class="cta-button" id="buyButton" onclick="buyTokens()">Buy DFEPE</button>
             <div id="buyStatus" class="status-message"></div>
         </div>
 
         <!-- Sekcja Stakingu (domyślnie ukryta) -->
         <div class="staking-section" id="stakingSection">
             <h2>Stake DFEPE Tokens</h2>
+            <div id="stakingInfo">
+                <p>Your Staked Tokens: <span id="stakedTokens">0 DFEPE</span></p>
+                <p>Your Staking Reward: <span id="stakingReward">0 DFEPE</span></p>
+            </div>
             <input type="number" id="stakeAmount" placeholder="DFEPE amount" class="input-field">
-            <button class="cta-button" onclick="stake()">Stake</button>
-            <button class="cta-button" onclick="unstake()">Unstake</button>
+            <button class="cta-button" id="stakeButton" onclick="stake()">Stake</button>
+            <button class="cta-button" id="unstakeButton" onclick="unstake()">Unstake</button>
+            <button class="cta-button" id="withdrawButton" onclick="withdraw()" style="display: none;">Withdraw Tokens & Rewards</button>
             <div id="stakeStatus" class="status-message"></div>
         </div>
     </section>
 
     <!-- Sekcja Opisu Tokenu -->
     <section id="token-description" class="token-description">
-        <h2>Dark Frog Pepe Token</h2>
+        <h2>🐸 Dark Frog Pepe Token</h2>
         <p>
             Where the memetic revolution meets the cybernetic abyss.
         </p>
@@ -334,7 +339,7 @@
             Join the cyber-anarchists who stake, trade, and burn insubordination in the furnace of decentralized power. Here, there is no mercy for weak wallets -- only the dark dance of cryptographic codes and NFTs that breathe the life of their owners.
         </p>
         <p>
-            Warning: In this swamp, profits evaporate faster than cybernetic LSD, and every click could be your last transaction. ☠️🔮
+            Warning: In this swamp, profits evaporate faster than cybernetic LSD, and every click could be your last transaction. 🐸🔮
         </p>
         <p>
             Dive into the darkness or let the darkness dive into you.
@@ -351,7 +356,7 @@
                     <li>70% Presale (700B)</li>
                     <li>20% Marketing (200B)</li>
                     <li>10% Development (100B)</li>
-                    <li>Contract Address: <span id="contractAddress">0xYourContractAddress</span></li> <!-- Dodany adres kontraktu -->
+                    <li>Contract Address: <span id="contractAddress">0xYourContractAddress</span></li>
                 </ul>
             </div>
         </div>
@@ -381,7 +386,7 @@
     </section>
 
     <footer>
-        <p>☠️ Dark Frog Army - Join the Revolution ☠️</p>
+        <p>☠️ Dark Frog Army - Join the Revolution</p>
         <div style="margin-top: 1rem;">
             <a href="https://x.com/DarkFrogPepe?t=UjKMVtWI1g9srsw9UrVgKQ&s=09" style="color: #39FF14; margin: 0 1rem;">X</a>
             <a href="https://t.me/dfepenews" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
@@ -406,18 +411,57 @@
         async function checkPresaleStatus() {
             try {
                 const presaleStartTime = await contract.methods.getPresaleStartTime().call(); // Zakładamy, że kontrakt ma taką metodę
+                const presaleEndTime = await contract.methods.getPresaleEndTime().call(); // Zakładamy, że kontrakt ma taką metodę
                 const now = Math.floor(Date.now() / 1000); // Czas w sekundach
 
-                if (now >= presaleStartTime) {
-                    // Jeśli pre-sale się rozpoczął, pokaż sekcje
+                if (now >= presaleStartTime && now <= presaleEndTime) {
+                    // Jeśli pre-sale trwa, pokaż sekcje
                     document.getElementById('saleInfoSection').style.display = 'block';
                     document.getElementById('walletSection').style.display = 'block';
                     document.getElementById('buySection').style.display = 'block';
                     document.getElementById('stakingSection').style.display = 'block';
                     updateSaleInfo(); // Rozpocznij aktualizację informacji
+                } else if (now > presaleEndTime) {
+                    // Jeśli pre-sale się zakończył, ukryj przycisk Buy i Staking
+                    document.getElementById('buyButton').style.display = 'none';
+                    document.getElementById('stakeButton').style.display = 'none';
+                    document.getElementById('unstakeButton').style.display = 'none';
+
+                    // Sprawdź, czy minął miesiąc od zakończenia pre-sale
+                    const oneMonthAfterPresaleEnd = presaleEndTime + 30 * 24 * 60 * 60; // 30 dni w sekundach
+                    if (now >= oneMonthAfterPresaleEnd) {
+                        // Jeśli minął miesiąc, pokaż przycisk wypłaty
+                        document.getElementById('withdrawButton').style.display = 'block';
+                        document.getElementById('stakeButton').style.display = 'none';
+                        document.getElementById('unstakeButton').style.display = 'none';
+                    }
+
+                    // Pokaż informacje o stakowanych tokenach i nagrodzie
+                    const stakedTokens = await contract.methods.getStakedTokens(account).call(); // Zakładamy, że kontrakt ma taką metodę
+                    const stakingReward = await contract.methods.getStakingReward(account).call(); // Zakładamy, że kontrakt ma taką metodę
+                    document.getElementById('stakedTokens').innerText = stakedTokens;
+                    document.getElementById('stakingReward').innerText = stakingReward;
                 }
             } catch (error) {
                 console.error("Error checking presale status:", error);
+            }
+        }
+
+        // Funkcja do wypłaty tokenów i nagród
+        async function withdraw() {
+            try {
+                if (!provider || !account) {
+                    alert("Please connect your wallet first!");
+                    return;
+                }
+
+                const contract = new provider.eth.Contract(abi, contractAddress);
+                document.getElementById('stakeStatus').innerText = "Processing withdrawal...";
+                await contract.methods.withdraw().send({ from: account });
+                document.getElementById('stakeStatus').innerText = "Tokens and rewards withdrawn successfully!";
+            } catch (error) {
+                console.error("Withdrawal error:", error);
+                document.getElementById('stakeStatus').innerText = "Withdrawal failed: " + error.message;
             }
         }
 
