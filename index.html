@@ -40,6 +40,7 @@
             list-style: none;
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 3rem;
             margin: 0;
             padding: 0;
@@ -54,6 +55,23 @@
 
         nav a:hover {
             text-shadow: 0 0 10px #39FF14;
+        }
+
+        .language-selector {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #39FF14;
+            color: #39FF14;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .language-selector:hover {
+            background: rgba(57, 255, 20, 0.1);
+            box-shadow: 0 0 10px #39FF14;
         }
 
         .hero {
@@ -259,7 +277,7 @@
             <li><a href="#features" data-translate="features">Features</a></li>
             <li><a href="#whitepaper" data-translate="whitepaper">Whitepaper</a></li>
             <li>
-                <select id="languageSelector">
+                <select id="languageSelector" class="language-selector">
                     <option value="en">English</option>
                     <option value="es">Español</option>
                     <option value="zh">中文</option>
@@ -328,26 +346,26 @@
     </section>
 
     <section id="token-description" class="token-description">
-        <h2>☠️ Dark Frog Pepe Token ☠️</h2>
-        <p>
+        <h2 data-translate="tokenDescriptionTitle">☠️ Dark Frog Pepe Token ☠️</h2>
+        <p data-translate="tokenDescriptionText1">
             Where the memetic revolution meets the cybernetic abyss.
         </p>
-        <p>
+        <p data-translate="tokenDescriptionText2">
             In the dark corners of the decentralized metaverse, among whispering algorithms and pulsating neon lights, a new cult is born. DFEPE -- a token mutated in the depths of the crypto-universe to become a symbol of rebellion against rigid systems. Its frog eyes glow in the dark, tracking your every move on the rusted chains of blocks.
         </p>
-        <p>
+        <p data-translate="tokenDescriptionText3">
             Join the cyber-anarchists who stake, trade, and burn insubordination in the furnace of decentralized power. Here, there is no mercy for weak wallets -- only the dark dance of cryptographic codes and NFTs that breathe the life of their owners.
         </p>
-        <p>
+        <p data-translate="tokenDescriptionText4">
             Warning: In this swamp, profits evaporate faster than cybernetic LSD, and every click could be your last transaction. ☠️🔮
         </p>
-        <p>
+        <p data-translate="tokenDescriptionText5">
             Dive into the darkness or let the darkness dive into you.
         </p>
     </section>
 
     <section id="tokenomics" class="section">
-        <h2>🔐 Tokenomics</h2>
+        <h2 data-translate="tokenomicsTitle">🔐 Tokenomics</h2>
         <div class="tokenomics-grid">
             <div>
                 <h3 data-translate="totalSupply">Total Supply: 1,000,000,000,000 DFEPE</h3>
@@ -362,7 +380,7 @@
     </section>
 
     <section id="features" class="section">
-        <h2>⚡ Core Features</h2>
+        <h2 data-translate="featuresTitle">⚡ Core Features</h2>
         <div class="tokenomics-grid">
             <div>
                 <h3 data-translate="lockedLiquidity">🔒 Locked Liquidity</h3>
@@ -380,17 +398,17 @@
     </section>
 
     <section id="whitepaper" class="section">
-        <h2>📜 Whitepaper</h2>
+        <h2 data-translate="whitepaperTitle">📜 Whitepaper</h2>
         <a href="docs/DFEPEWhitepaper.pdf" class="cta-button" download data-translate="downloadWhitepaper">Download PDF</a>
     </section>
 
     <footer>
         <p data-translate="joinRevolution">☠️ Dark Frog Army - Join the Revolution ☠️</p>
         <div style="margin-top: 1rem;">
-            <a href="https://x.com/DarkFrogPepe?t=UjKMVtWI1g9srsw9UrVgKQ&s=09" style="color: #39FF14; margin: 0 1rem;">X</a>
-            <a href="https://t.me/dfepenews" style="color: #39FF14; margin: 0 1rem;">Telegram</a>
-            <a href="https://www.reddit.com/u/DarkFrogPepe/s/plyWOPV3Vp" style="color: #39FF14; margin: 0 1rem;">Reddit</a>
-            <a href="https://www.facebook.com/share/1DZeaQfMQ5/" style="color: #39FF14; margin: 0 1rem;">Facebook</a>
+            <a href="https://x.com/DarkFrogPepe?t=UjKMVtWI1g9srsw9UrVgKQ&s=09" style="color: #39FF14; margin: 0 1rem;" data-translate="footerSocialX">X</a>
+            <a href="https://t.me/dfepenews" style="color: #39FF14; margin: 0 1rem;" data-translate="footerSocialTelegram">Telegram</a>
+            <a href="https://www.reddit.com/u/DarkFrogPepe/s/plyWOPV3Vp" style="color: #39FF14; margin: 0 1rem;" data-translate="footerSocialReddit">Reddit</a>
+            <a href="https://www.facebook.com/share/1DZeaQfMQ5/" style="color: #39FF14; margin: 0 1rem;" data-translate="footerSocialFacebook">Facebook</a>
         </div>
     </footer>
 
