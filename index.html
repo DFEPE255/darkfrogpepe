@@ -344,7 +344,7 @@
         <p>The Anti-Rug Memecoin Revolution</p>
 
         <div class="countdown">
-            <h2>Presale Starts In:</h2>
+            <h2>Planned Presale Starts In:</h2>
             <div class="countdown-timer">
                 <div id="days">00d</div>
                 <div id="hours">00h</div>
@@ -476,14 +476,7 @@
             // Check if the detected language is supported
             if (supportedLanguages.includes(lang)) {
                 // Change the language using Google Translate
-                const googleTranslateElement = document.querySelector('.goog-te-combo');
-                if (googleTranslateElement) {
-                    googleTranslateElement.value = lang;
-                    googleTranslateElement.dispatchEvent(new Event('change'));
-                }
-
-                // Apply RTL styles if needed
-                applyRTLStyles(lang);
+                changeLanguage(lang);
             }
         }
 
@@ -518,14 +511,19 @@
 
         // Change language manually
         function changeLanguage(lang) {
-            const googleTranslateElement = document.querySelector('.goog-te-combo');
-            if (googleTranslateElement) {
-                googleTranslateElement.value = lang;
-                googleTranslateElement.dispatchEvent(new Event('change'));
+            // Change the language using Google Translate
+            if (typeof google !== 'undefined' && google.translate) {
+                google.translate.translatePage('en', lang); // Change the page language
             }
 
             // Apply RTL styles if needed
             applyRTLStyles(lang);
+
+            // Update the language selector
+            const languageSelect = document.getElementById('languageSelect');
+            if (languageSelect) {
+                languageSelect.value = lang;
+            }
         }
 
         // Initialize everything on page load
